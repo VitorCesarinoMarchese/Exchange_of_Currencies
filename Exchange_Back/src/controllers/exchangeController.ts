@@ -31,7 +31,7 @@ export const getWalletController = async (req: Request, res: Response) => {
 
 export const postTransaction = async (req: Request, res: Response) => {
     try {
-      const {currency, amountm, user_id} = req.body
+      const {currency, amount, user_id} = req.body
       const token = req.header("Authorization");
 
       if (!token) {
