@@ -4,19 +4,21 @@ function Input({
   className,
   change,
   read = false,
+  w = "w-80"
 }: {
   type: string;
   placeholder: string;
   className?: string;
   change?: () => void;
   read?: boolean;
+  w?: string
 }) {
   return (
     <>
       <input
         type={type}
         placeholder={placeholder}
-        className={"w-80 border rounded-2xl px-4 py-3  bg-white"+ " " + className}
+        className={`${w} border rounded-xl px-4 py-3 bg-white ${className}`}
         onChange={change}
         readOnly={read}
       />

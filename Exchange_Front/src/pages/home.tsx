@@ -3,16 +3,18 @@ import CurencyConverter from "../components/CurencyConverter";
 import Hero from "../components/Hero";
 import Infocard from "../components/Infocard";
 import Navbar from "../components/Navbar";
+import Wallet from "../components/wallet";
 import { useLogged } from "../hooks/loggedHook";
 function Home() {
   const { logged } = useLogged();
   if (logged) {
     return (
+      
       <>
         <div className="hidden bg-secondary"></div>
         <Navbar logged={logged} />
         <div className="flex flex-col items-center p-4 gap-8">
-          <Hero />
+          <Wallet />
           <CurencyConverter />
           <Chart />
           <Infocard

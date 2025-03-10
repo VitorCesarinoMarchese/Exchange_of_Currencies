@@ -1,11 +1,8 @@
 import { useState } from "react";
 import { CaretDown } from "@phosphor-icons/react/dist/ssr";
 
-interface DropdownProps {
-  onChangeValue: (valeu: string) => void;
-}
 
-function Dropdown({ onChangeValue }: DropdownProps) {
+function Dropdown({ onChangeValue }: {onChangeValue: (valeu: string) => void}) {
   const [isOpen, setIsOpen] = useState(false);
   const [value, setValue] = useState("USD");
 
@@ -22,7 +19,7 @@ function Dropdown({ onChangeValue }: DropdownProps) {
     <div className="relative inline-block">
       <button
         onClick={toggleDropdown}
-        className="px-4 py-3 bg-white w-80 flex justify-between items-center gap-4 text-black rounded-2xl border"
+        className="px-4 py-3 bg-white w-80 flex justify-between items-center gap-4 text-black rounded-xl border"
       >
         {value} <CaretDown size={14} />
       </button>

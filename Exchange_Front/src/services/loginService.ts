@@ -4,7 +4,7 @@ import { fetchPostApi } from "./apiService";
 export const loginService = async (email: string, password: string) => {
   try {
     const response = await fetchPostApi("auth/login", { email, password });
-    const data: LoginResponse = await response;
+    const data: LoginResponse = await response.json();
     return { data, error: null, loading: false }; 
   } catch (error) {
     console.error(error);

@@ -7,15 +7,17 @@ function Navbar({ logged }: { logged: boolean }) {
   const [hidden, setHidden] = useState(true);
 
   const handleLogout = () => {
-    localStorage.removeItem("access_token")
-    localStorage.removeItem("refresh_token")
-    localStorage.removeItem("user_email")
-    localStorage.removeItem("user_id")
-  }
+    localStorage.removeItem("access_token");
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("user_email");
+    localStorage.removeItem("user_id");
+  };
 
   return (
     <nav className="w-full h-24 bg-primary flex items-center justify-between p-4">
-      <img src="/logo.svg" alt="Logo" className="max-h-12" />
+      <NavLink to={"/"}>
+        <img src="/logo.svg" alt="Logo" className="max-h-12" />
+      </NavLink>
 
       <button
         className={hidden ? "" : "hidden"}
@@ -42,8 +44,13 @@ function Navbar({ logged }: { logged: boolean }) {
             </NavLink>
           </li>
           <li>
+            <NavLink to={"/history"}>
+              <Btn color="secondary" label="History" />
+            </NavLink>
+          </li>
+          <li>
             <NavLink to={"/"}>
-              <Btn color="secondary" label="Logout" func={handleLogout}/>
+              <Btn color="secondary" label="Logout" func={handleLogout} />
             </NavLink>
           </li>
         </ul>

@@ -8,19 +8,21 @@ export const registerController = async (req: Request, res: Response) => {
   try {
 
     const { name, email, password } = req.body;
-
+      
     if (!name || !email || !password) {
       res.status(400).json({ error: "Missing required data" });
+      return
     }
 
     const verifyEmail = await users.findOne({ email });
     if (verifyEmail) {
       res.status(409).json({ error: "Email already in use" });
+      return
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
 
-    const document = await new users({
+    const document = new users({
       name: name,
       email: email,
       password: hashPassword,
@@ -30,7 +32,7 @@ export const registerController = async (req: Request, res: Response) => {
         gbp: 100,
       },
     });
-    document.save();
+    await document.save();
     res.status(201).json({ message: "User registered successfully" });
   } catch (e) {
     console.error("Error in registerController", e);
@@ -45,15 +47,18 @@ export const loginController = async (req: Request, res: Response) => {
 
     if (!email || !password) {
       res.status(400).json({ error: "Email and password are required" });
+      return
     }
 
     const user = await users.findOne({ email });
     if (!user || !user.password) {
       res.status(401).json({ error: "Wrong email or password" });
+      return
     } else {
       const isPasswordValid = await bcrypt.compare(password, user.password);
       if (!isPasswordValid) {
         res.status(401).json({ error: "Invalid email or password" });
+      return
       }
 
       const { accessToken, refreshToken } = generateTokens(user._id as string);

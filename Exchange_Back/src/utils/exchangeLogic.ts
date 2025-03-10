@@ -1,30 +1,34 @@
 import { conversion } from "./conversionFunctions";
 
-export const exchangeLogic = (
+export const exchangeLogic = async (
   usd: number,
-  gpb: number,
+  gbp: number,
   amount: number,
   currency: string
-) => {
-    let conversionData = {
-        from: "",
-        to: "",
-        amount: `${amount}`
+): Promise<{ total?: string; rate?: number; error?: string }> => {
+  let conversionData = {
+    from: "",
+    to: "",
+    amount: `${amount}`
+  };
+
+  if (currency === "USDGBP") {
+    if (usd < amount) {
+      return { error: "Not enough funds" };
     }
-    if(currency == "USDGBP"){
-        if(usd < amount){
-            return "not enoght founds"
-        }
-        conversionData.from = "USD"
-        conversionData.to = "GBP"
-        return conversion(conversionData)
+    conversionData.from = "USD";
+    conversionData.to = "GBP";
+    return await conversion(conversionData);
+  }
+
+  if (currency === "GBPUSD") {
+    if (gbp < amount) {
+      return { error: "Not enough funds" };
     }
-    if(currency == "GBPUSD"){
-        if(gpb < amount){
-            return "not enoght founds"
-        }
-        conversionData.from = "GBP"
-        conversionData.to = "USD"
-        return conversion(conversionData)
-    }
+    conversionData.from = "GBP";
+    conversionData.to = "USD";
+    return await conversion(conversionData);
+  }
+
+  return { error: "Invalid currency type" };
 };

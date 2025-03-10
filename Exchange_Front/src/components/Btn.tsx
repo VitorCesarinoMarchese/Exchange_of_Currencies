@@ -16,7 +16,7 @@ function Btn({
   return (
     <>
       <button
-        className={`bg-${color} ${w} h-14 p-4 rounded-2xl text-2xl flex items-center justify-center ${classname}`}
+        className={`bg-${color} ${w} h-14 p-4 rounded-xl text-2xl flex items-center justify-center ${classname}`}
         onClick={func}
         disabled={disable}
       >

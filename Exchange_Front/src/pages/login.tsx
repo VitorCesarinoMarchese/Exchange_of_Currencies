@@ -30,10 +30,11 @@ function Login() {
     }
   };            
 
-  if(localStorage.getItem("access_token")) return navigate("/")
+  
 
   return (
     <>
+    {localStorage.getItem("access_token") ?  navigate("/")  : "" }
       <Navbar logged={false} />
       <div className="flex flex-col items-center mt-8 ">
         <h1 className="text-3xl font-bold mb-7">Login</h1>

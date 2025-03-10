@@ -20,14 +20,35 @@ export const fetchAuthApi = async (endpoin: string, token: string) => {
             }
         })
         if(!response.ok){
-            throw new Error("Error fetching api");
+            console.error("Error fetching api");
         }
-        return response.json()
+        return response
     }catch(e){
         console.error(e)
         throw new Error(`${e}`)
     }
 }
+
+export const fetchAuthPostApi = async (endpoin: string, body: object, token: string) => {
+    try{
+        const response = await fetch("http://localhost:3030/api/" + endpoin,{
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `${token}`
+            },
+            body: JSON.stringify(body)
+        })
+        if(!response.ok){
+            throw new Error("Error fetching api");
+        }
+        return response
+    }catch(e){
+        console.error(e)
+        throw new Error(`${e}`)
+    }
+}
+
 
 export const fetchPostApi = async (endpoin: string, body: object) => {
     try{
@@ -41,7 +62,7 @@ export const fetchPostApi = async (endpoin: string, body: object) => {
         if(!response.ok){
             throw new Error("Error fetching api");
         }
-        return response.json()
+        return response
     }catch(e){
         console.error(e)
         throw new Error(`${e}`)

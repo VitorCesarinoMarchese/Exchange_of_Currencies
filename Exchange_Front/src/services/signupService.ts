@@ -11,7 +11,7 @@ export const signupService = async (
       email,
       password,
     });
-    const data = await response;
+    const data = await response.json();
     return { data, error: null, loading: false };
   } catch (e) {
     console.error(e);

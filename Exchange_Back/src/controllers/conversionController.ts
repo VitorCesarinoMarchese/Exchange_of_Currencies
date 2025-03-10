@@ -6,9 +6,12 @@ export const conversionController = async (req: Request, res: Response) => {
         const userData = req.body;
 
         const result = await conversion(userData);
-
-        res.json({ result });
+        if(!result.rate || !result.total){
+            res.status(400).json(result)
+            return
+        }
+        res.status(200).json({ result });
     } catch (e: any) {
-        res.status(400).json({ error: e.message || "Internal server error" });
+        res.status(500).json({ error: e.message || "Internal server error" });
     }
 };
