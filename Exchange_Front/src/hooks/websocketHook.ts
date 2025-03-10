@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { exchangeRates } from "../models/exchangeRates"
+import { exchangeRates } from "../@types/exchangeRates"
 
 export const useWebsocket = () =>{
     const [exchangeRates, setExchangeRates] = useState<exchangeRates | null>(null)

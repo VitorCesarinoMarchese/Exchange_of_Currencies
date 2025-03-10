@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchPostApi } from "../services/apiService";
-import { ConversionResponse } from "../models/conversionResponse";
+import { ConversionResponse } from "../@types/conversionResponse";
 
 export const useConvert = (userData: {
   from: string;

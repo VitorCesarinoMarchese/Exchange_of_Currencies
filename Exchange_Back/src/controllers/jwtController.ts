@@ -47,12 +47,14 @@ export const verifyToken = (
   const token = req.header("Authorization");
   if (!token) {
     res.status(403).json({ error: "Access denied" });
+    return
   } else {
     const isValid = validateToken(token as string)
     if(isValid){
       next();
     }else{
       res.status(403).json({ error: "Invalid or expired token" });
+      return
     }
   }
 };

@@ -1,4 +1,4 @@
-import { ApiTimeSeriesResponse } from "../models/api_response";
+import { ApiTimeSeriesResponse } from "../@types/api_response";
 
 export const dayChart = async (currency: string) => {
   const today = new Date();

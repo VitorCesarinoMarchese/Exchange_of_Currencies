@@ -1,4 +1,4 @@
-import { LoginResponse } from "../models/LoginResponseModel";
+import { LoginResponse } from "../@types/LoginResponseModel";
 import { fetchPostApi } from "./apiService";
 
 export const loginService = async (email: string, password: string) => {

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import conn from "../config/database";
 import users from "../models/user";
 import bcrypt from "bcrypt";
-import { generateTokens } from "../config/jwt";
+import { generateTokens } from "../utils/generateJWT";
 
 export const registerController = async (req: Request, res: Response) => {
   try {

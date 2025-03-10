@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 dotenv.config();
 import WebSocket from "ws";
-import { ApiLiveRatesResponse } from "../models/api_response";  
+import { ApiLiveRatesResponse } from "../@types/api_response";  
 
 let exchangeRates = { GBPUSD: 1.27, USDGBP: 0.78, TS: Date.now().toString() };
 let reconnectInterval = 1000 * 10;

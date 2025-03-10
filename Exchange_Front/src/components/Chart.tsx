@@ -9,7 +9,7 @@ import {
 import Btn from "./Btn";
 import { useCharts } from "../hooks/chartHook";
 import { useWebsocket } from "../hooks/websocketHook";
-import { exchangeRates } from "../models/exchangeRates";
+import { exchangeRates } from "../@types/exchangeRates";
 
 function Chart() {
   const [state, setState] = useState({});

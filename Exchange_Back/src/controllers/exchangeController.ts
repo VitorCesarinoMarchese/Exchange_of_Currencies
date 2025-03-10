@@ -9,12 +9,15 @@ export const getWalletController = async (req: Request, res: Response) => {
   try {
     const user_id = String(req.params.user_id);
     const token = req.header("Authorization");
+
     if (!user_id) {
       res.status(400).json({ error: "User_id required" });
       return;
     }
+
     if (!token) {
       res.status(403).json({ error: "Access denied" });
+      return
     } else {
       const isValid = validateToken(token);
       if (isValid) {
@@ -26,6 +29,7 @@ export const getWalletController = async (req: Request, res: Response) => {
         res.status(200).json({ wallet: user.wallet });
       } else {
         res.status(403).json({ error: "Invalid or expired token" });
+        return
       }
     }
   } catch (e: any) {
@@ -37,6 +41,10 @@ export const addFoundsController = async (req: Request, res: Response) => {
     const user_id = String(req.params.user_id);
     const {usd, gbp} = req.body
     const token = req.header("Authorization");
+    if (!user_id) {
+      res.status(400).json({ error: "User_id required" });
+      return;
+    }
     if(!usd || !gbp){
       res.status(400).json({ error: "USD and GBP amounts are required" });
       return
@@ -44,10 +52,6 @@ export const addFoundsController = async (req: Request, res: Response) => {
     if(!isPositiveNumber(usd) || !isPositiveNumber(gbp)){
       res.status(400).json({ error: "USD and GBP amounts must be a positive number" });
       return
-    }
-    if (!user_id) {
-      res.status(400).json({ error: "User_id required" });
-      return;
     }
     if (!token) {
       res.status(403).json({ error: "Access denied" });
@@ -60,7 +64,7 @@ export const addFoundsController = async (req: Request, res: Response) => {
           return;
         }
         if(!user.wallet){
-          res.status(404).json({ error: "User don't have a wallet found" });
+          res.status(404).json({ error: "User don't have a wallet" });
           return
         }
         user.wallet = {usd: user.wallet.usd + Number(usd), gbp: user.wallet.gbp + Number(gbp)}
@@ -88,7 +92,7 @@ export const postTransaction = async (req: Request, res: Response) => {
       return;
     }
     if (!token) {
-      res.status(403).json({ error: "Access denied" });
+      res.status(401).json({ error: "Access denied" });
       return;
     } else {
       const isValid = validateToken(token);
@@ -146,15 +150,22 @@ export const getTransactions = async (req: Request, res: Response) => {
     res.status(400).json({ error: "User_id required" });
     return;
   }
+
+  const user = await users.findOne({ _id: user_id });
+  if (!user) {
+    res.status(404).json({ error: "User not found" });
+    return;
+  }
+
   if (!token) {
-    res.status(403).json({ error: "Access denied" });
+    res.status(401).json({ error: "Access denied" });
     return;
   }
 
   const isValid = validateToken(token);
 
   if (!isValid) {
-    res.status(403).json({ error: "Invalid or expired token" });
+    res.status(404).json({ error: "Invalid or expired token" });
     return;
   }
   try {
@@ -163,7 +174,7 @@ export const getTransactions = async (req: Request, res: Response) => {
       res.status(404).json({ error: "Transactions not found" });
       return;
     }
-    res.status(200).json({recentTransactions });
+    res.status(200).json({ recentTransactions });
   } catch (e: any) {
     res.status(500).json({ error: e.message || "Internal server error" });
   }
