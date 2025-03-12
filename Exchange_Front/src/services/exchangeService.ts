@@ -16,7 +16,7 @@ export const exchangeService = async (transaction: transaction) => {
   }
 };
 
-export const addFunds = async (funds: {usd: number, gbp:number}) => {
+export const addFundsService = async (funds: {usd: number, gbp:number}) => {
   try {
     const accessToken = localStorage.getItem("access_token")
     const user_id = localStorage.getItem("user_id")

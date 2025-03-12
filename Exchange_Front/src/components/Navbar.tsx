@@ -22,6 +22,7 @@ function Navbar({ logged }: { logged: boolean }) {
       <button
         className={hidden ? "" : "hidden"}
         onClick={() => setHidden(false)}
+        aria-label="open menu"
       >
         <List size={40} />
       </button>
@@ -63,6 +64,7 @@ function Navbar({ logged }: { logged: boolean }) {
           <button
             className="absolute top-4 right-4"
             onClick={() => setHidden(true)}
+            aria-label="close menu"
           >
             <X size={40} />
           </button>

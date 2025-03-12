@@ -179,24 +179,20 @@ function Chart() {
             />
           }
         >
-          {/* Add Y-axis */}
           <VictoryAxis dependentAxis />
 
-          {/* Conditionally render the X-axis based on chartType */}
           {chartType !== "year/USDGBP" && (
             <VictoryAxis
-              tickFormat={(t, i) => (i % 2 === 0 ? t : "")} // Show only every 2nd date
+              tickFormat={(t, i) => (i % 2 === 0 ? t : "")} 
               style={{
-                tickLabels: { fontSize: 14, angle: -45, padding: 5 }, // Increase font size for better readability
+                tickLabels: { fontSize: 14, angle: -45, padding: 5 }, 
               }}
             />
           )}
 
-          {/* For year chartType, show fewer ticks */}
           {chartType === "year/USDGBP" && (
             <VictoryAxis
               tickFormat={(t) => {
-                // Format date as mm/yyyy (e.g., 01/2023)
                 const date = new Date(t);
                 const month = String(date.getMonth() + 1).padStart(2, "0");
                 const year = date.getFullYear();
@@ -204,12 +200,12 @@ function Chart() {
               }}
               style={{
                 tickLabels: {
-                  fontSize: 12, // Slightly larger font for readability
-                  angle: 0, // No rotation for readability
+                  fontSize: 12, 
+                  angle: 0, 
                   padding: 5,
                 },
               }}
-              tickCount={4} // Limit to 4 ticks (one per quarter)
+              tickCount={4} 
             />
           )}
 
