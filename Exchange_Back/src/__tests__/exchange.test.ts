@@ -3,8 +3,7 @@ import createServer from "../config/server";
 import users from "../models/user";
 import mongoose from "mongoose";
 import { validateToken } from "../utils/validateToken";
-import transactions from "../models/transaction";
-import exp from "constants";
+
 
 jest.mock("../utils/validateToken", () => ({
   validateToken: jest.fn(),

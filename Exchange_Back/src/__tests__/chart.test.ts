@@ -10,7 +10,6 @@ import createServer from "../config/server";
 
 const { app } = createServer();
 
-describe("Chart Functions", () => {
   beforeEach(() => {
     process.env.URL_REST = "http://dummyapi.com/";
     process.env.API_KEY = "dummyapikey";
@@ -19,7 +18,6 @@ describe("Chart Functions", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
-
   describe("Chart System", () => {
     describe("Chart Handler", () => {
       describe("given the currency is invalid", () => {
@@ -66,7 +64,6 @@ describe("Chart Functions", () => {
 
     const chartFunctions = [dayChart, weekChart, monthChart, yearChart];
     const timeFrames = ["day", "week", "month", "year"];
-
     chartFunctions.forEach((chartFunction, index) => {
       describe(`${timeFrames[index]} Chart`, () => {
         it("should return API data on successful fetch", async () => {
@@ -111,4 +108,3 @@ describe("Chart Functions", () => {
       });
     });
   });
-});
