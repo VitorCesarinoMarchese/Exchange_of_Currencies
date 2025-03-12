@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import conn from "../config/database";
 import users from "../models/user";
 import bcrypt from "bcrypt";
 import { generateTokens } from "../utils/generateJWT";
@@ -52,7 +51,7 @@ export const loginController = async (req: Request, res: Response) => {
 
     const user = await users.findOne({ email });
     if (!user || !user.password) {
-      res.status(401).json({ error: "Wrong email or password" });
+      res.status(401).json({ error: "Invalid email or password" });
       return
     } else {
       const isPasswordValid = await bcrypt.compare(password, user.password);
@@ -61,7 +60,7 @@ export const loginController = async (req: Request, res: Response) => {
       return
       }
 
-      const { accessToken, refreshToken } = generateTokens(user._id as string);
+      const { accessToken, refreshToken } = await generateTokens(user._id as string);
 
       user.refreshToken = refreshToken;
       user.save();

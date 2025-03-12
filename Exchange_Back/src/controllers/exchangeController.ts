@@ -1,17 +1,17 @@
 import { Request, Response } from "express";
 import users from "../models/user";
 import { validateToken } from "../utils/validateToken";
-import { exchangeLogic } from "../utils/exchangeLogic";
 import transactions from "../models/transaction";
 import { isPositiveNumber } from "../utils/typeValidation";
+import mongoose from "mongoose";
 
 export const getWalletController = async (req: Request, res: Response) => {
   try {
-    const user_id = String(req.params.user_id);
+    const user_id =  req.params.user_id;
     const token = req.header("Authorization");
 
-    if (!user_id) {
-      res.status(400).json({ error: "User_id required" });
+    if (!mongoose.Types.ObjectId.isValid(user_id)) {
+      res.status(400).json({ error: "Invalid user id" });
       return;
     }
 
@@ -36,13 +36,13 @@ export const getWalletController = async (req: Request, res: Response) => {
     res.status(500).json({ error: e.message || "Internal server error" });
   }
 };
-export const addFoundsController = async (req: Request, res: Response) => {
+export const addFundsController = async (req: Request, res: Response) => {
   try {
-    const user_id = String(req.params.user_id);
+    const user_id = req.params.user_id;
     const {usd, gbp} = req.body
     const token = req.header("Authorization");
-    if (!user_id) {
-      res.status(400).json({ error: "User_id required" });
+    if (!mongoose.Types.ObjectId.isValid(user_id)) {
+      res.status(400).json({ error: "Invalid user id" });
       return;
     }
     if(!usd || !gbp){
@@ -82,6 +82,11 @@ export const postTransaction = async (req: Request, res: Response) => {
   try {
     const { currency, amount, user_id, rate } = req.body;
     const token = req.header("Authorization");
+
+    if (!mongoose.Types.ObjectId.isValid(user_id)) {
+      res.status(400).json({ error: "Invalid user id" });
+      return;
+    }
 
     if (!currency || !amount || !user_id || !rate) {
       res.status(400).json({ error: "Missing required data" });
@@ -146,14 +151,8 @@ export const postTransaction = async (req: Request, res: Response) => {
 export const getTransactions = async (req: Request, res: Response) => {
   const user_id = String(req.params.user_id);
   const token = req.header("Authorization");
-  if (!user_id) {
-    res.status(400).json({ error: "User_id required" });
-    return;
-  }
-
-  const user = await users.findOne({ _id: user_id });
-  if (!user) {
-    res.status(404).json({ error: "User not found" });
+  if (!mongoose.Types.ObjectId.isValid(user_id)) {
+    res.status(400).json({ error: "Invalid user id" });
     return;
   }
 
@@ -162,15 +161,24 @@ export const getTransactions = async (req: Request, res: Response) => {
     return;
   }
 
+
+
+
+
   const isValid = validateToken(token);
 
   if (!isValid) {
-    res.status(404).json({ error: "Invalid or expired token" });
+    res.status(403).json({ error: "Invalid or expired token" });
+    return;
+  }
+  const user = await users.findOne({ _id: user_id });
+  if (!user) {
+    res.status(404).json({ error: "User not found" });
     return;
   }
   try {
     const recentTransactions = await transactions.find({ user_id: user_id });
-    if (!recentTransactions) {
+    if (recentTransactions.length === 0 ) {
       res.status(404).json({ error: "Transactions not found" });
       return;
     }

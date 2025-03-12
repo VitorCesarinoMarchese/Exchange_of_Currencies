@@ -25,7 +25,7 @@ export const connect = () => {
     });
 
     ws.on("message", function incoming(data: string) {
-        if (data !== "Connected") {
+        if (data != "Connected") {
             try {
                 const parsedData: ApiLiveRatesResponse = JSON.parse(data);
                 exchangeRates.GBPUSD = parsedData.ask;

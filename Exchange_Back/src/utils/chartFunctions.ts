@@ -11,15 +11,15 @@ export const dayChart = async (currency: string) => {
     );
 
     if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`);
+      return {error: `API request failed with status ${response.status}`};
     }
 
     const apiData: ApiTimeSeriesResponse = await response.json();
     return apiData;
   } catch (error) {
     console.log(`${process.env.URL_REST}timeseries?api_key=${process.env.API_KEY}&currency=${currency}&format=records&start_date=${start}&end_date=${end}&interval=hourly&period=1`)
-    console.error("Error fetching day chart data:", error);
-    return { error: "Failed to fetch day chart data" };
+    console.error("Error fetching day chart data:");
+    return { error: `Failed to fetch day chart data` };
   }
 };
 
@@ -36,7 +36,7 @@ export const weekChart = async (currency: string) => {
     );
 
     if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`);
+      return {error: `API request failed with status ${response.status}`};
     }
 
     const apiData: ApiTimeSeriesResponse = await response.json();
@@ -61,7 +61,7 @@ export const monthChart = async (currency: string) => {
     );
 
     if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`);
+      return {error: `API request failed with status ${response.status}`};
     }
 
     const apiData: ApiTimeSeriesResponse = await response.json();
@@ -86,7 +86,7 @@ export const yearChart = async (currency: string) => {
     );
 
     if (!response.ok) {
-      throw new Error(`API request failed with status ${response.status}`);
+      return {error: `API request failed with status ${response.status}`};
     }
 
     const apiData: ApiTimeSeriesResponse = await response.json();

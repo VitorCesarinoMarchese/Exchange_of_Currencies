@@ -1,10 +1,7 @@
+import { conversionBody } from "../@types/conversionBody";
 import { getExchangeRates } from "./webSocket";
 
-export const conversion = async (userData: {
-  from: string;
-  to: string;
-  amount: string;
-}): Promise<{ total?: string; rate?: number; error?: string }> => {
+export const conversion = async (userData: conversionBody): Promise<{ total?: number; rate?: number; error?: string }> => {
   const { GBPUSD, USDGBP } = getExchangeRates();
 
   if (!GBPUSD || !USDGBP) {
@@ -19,7 +16,7 @@ export const conversion = async (userData: {
   }
 
   let rate = GBPtoUSDCheck ? GBPUSD : USDGBP;
-  const total = (rate * parseFloat(userData.amount)).toFixed(2);
+  const total = Number((rate * userData.amount).toFixed(2));
 
   return { total, rate };
 };
