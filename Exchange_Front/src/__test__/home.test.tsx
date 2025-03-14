@@ -1,0 +1,67 @@
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import Home from '../pages/Home';
+import { vi } from 'vitest';
+import { MemoryRouter } from 'react-router';
+import { useLogged } from '../hooks/loggedHook';
+
+beforeEach(() => {
+  vi.clearAllMocks();
+});
+
+vi.mock('../components/Chart', () => ({
+  default: () => <div>Chart</div>,
+}));
+
+vi.mock('../components/CurencyConverter', () => ({
+  default: () => <div>Currency Converter</div>,
+}));
+
+vi.mock('../components/Hero', () => ({
+  default: () => <div>Hero</div>,
+}));
+
+vi.mock('../components/Infocard', () => ({
+  default: ({ title }: { title: string }) => <div>{title}</div>,
+}));
+
+vi.mock('../components/Navbar', () => ({
+  default: ({ logged }: { logged: boolean }) => <div>{logged ? 'Logged In' : 'Logged Out'}</div>,
+}));
+
+vi.mock('../components/wallet', () => ({
+  default: () => <div>Wallet</div>,
+}));
+
+vi.mock('../hooks/loggedHook', () => ({
+  useLogged: vi.fn(),
+}));
+
+describe('Home Component', () => {
+  test('renders the home page when logged in', () => {
+    (useLogged as vi.Mock).mockReturnValue({ logged: true });
+
+    render(
+      <MemoryRouter>
+        <Home />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('Logged In')).toBeInTheDocument();
+    expect(screen.getByText('Wallet')).toBeInTheDocument();
+  });
+
+  test('renders the home page when logged out', () => {
+    (useLogged as vi.Mock).mockReturnValue({ logged: false });
+
+    render(
+      <MemoryRouter>
+        <Home />
+      </MemoryRouter>
+    );
+
+    expect(screen.getByText('Logged Out')).toBeInTheDocument();
+    expect(screen.getByText('Hero')).toBeInTheDocument();
+
+  });
+});

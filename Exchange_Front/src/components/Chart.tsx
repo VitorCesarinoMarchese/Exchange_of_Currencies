@@ -11,7 +11,7 @@ import { useCharts } from "../hooks/chartHook";
 import { useWebsocket } from "../hooks/websocketHook";
 import { exchangeRates } from "../@types/exchangeRates";
 
-function Chart() {
+function Chart({className = ""}: {className?: string}) {
   const [state, setState] = useState({});
   const [chartType, setChartType] = useState("day/USDGBP");
 
@@ -25,8 +25,16 @@ function Chart() {
 
   if (loading) {
     return (
-      <div className="bg-primary p-4 max-w-[352px] rounded-xl flex flex-col gap-4">
-        <div className="max-w-[375px] bg-white rounded-xl">
+      <div className={`bg-primary p-4 max-w-[352px]  md:max-w-[660px] rounded-xl flex flex-col gap-4 ${className}`}>
+        {exchangeRates ? (
+        <ul className="text-white md:text-xl">
+           <li>GBP/USD: {exchangeRates.GBPUSD.toFixed(4)}</li>
+          <li>USD/GBP: {exchangeRates.USDGBP.toFixed(4)}</li> 
+        </ul>
+      ) : (
+        <p>Loading...</p>
+      )}
+        <div className="max-w-[375px] bg-white rounded-xl md:max-w-[660px]">
           <VictoryChart
             width={375}
             theme={VictoryTheme.clean}
@@ -114,8 +122,16 @@ function Chart() {
 
   if (error) {
     return (
-      <div className="bg-primary p-4 max-w-[352px] rounded-xl flex flex-col gap-4">
-        <div className="max-w-[375px] bg-white rounded-xl">Error: {error}</div>
+      <div className={`bg-primary p-4 max-w-[352px]  md:max-w-[660px] rounded-xl flex flex-col gap-4 ${className}`}>
+        {exchangeRates ? (
+        <ul className="text-white md:text-xl">
+           <li>GBP/USD: {exchangeRates.GBPUSD.toFixed(4)}</li>
+          <li>USD/GBP: {exchangeRates.USDGBP.toFixed(4)}</li> 
+        </ul>
+      ) : (
+        <p>Loading...</p>
+      )}
+        <div className="max-w-[375px] bg-white rounded-xl md:max-w-[660px]">Error: {error}</div>
         <ul className="flex gap-4 overflow-x-auto whitespace-nowrap -mx-4">
           <li>
             <Btn
@@ -157,16 +173,16 @@ function Chart() {
   }
 
   return (
-    <div className="bg-primary p-4 max-w-[352px] rounded-xl flex flex-col gap-4">
+    <div className={`bg-primary p-4 max-w-[352px]  md:max-w-[660px] rounded-xl flex flex-col gap-4 ${className}`}>
       {exchangeRates ? (
-        <ul className="text-white">
+        <ul className="text-white md:text-xl">
            <li>GBP/USD: {exchangeRates.GBPUSD.toFixed(4)}</li>
           <li>USD/GBP: {exchangeRates.USDGBP.toFixed(4)}</li> 
         </ul>
       ) : (
         <p>Loading...</p>
       )}
-      <div className="max-w-[375px] bg-white rounded-xl">
+      <div className="max-w-[375px]  md:max-w-[660px] bg-white rounded-xl">
         <VictoryChart
           width={375}
           theme={VictoryTheme.clean}

@@ -110,7 +110,11 @@ export const postTransaction = async (req: Request, res: Response) => {
         } else {
           if (user.wallet) {
             const newAmount = amount * rate;
-            if(user.wallet.usd - amount < 0 || user.wallet.gbp - amount < 0){
+            if(currency == "USDGBP" && user.wallet.usd - amount < 0){
+              res.status(400).json({ error: "Insuficient founds" });
+              return
+            }
+            if(currency == "GBPUSD" && user.wallet.gbp - amount < 0){
               res.status(400).json({ error: "Insuficient founds" });
               return
             }

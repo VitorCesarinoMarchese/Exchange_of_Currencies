@@ -29,7 +29,6 @@ function Dashboard() {
           reloadTrigger={reloadTrigger}
           onChangeValue={(value: boolean) => {
             setOpen(value);
-            console.log(value);
           }}
         />
         {open ? (

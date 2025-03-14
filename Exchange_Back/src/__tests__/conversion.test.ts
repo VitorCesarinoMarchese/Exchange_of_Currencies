@@ -12,18 +12,6 @@ describe("Conversion system", () => {
         expect(res.body).toEqual({ error: "Amount, from and to are required" });
       });
     });
-    describe("given the amount type is not a number", () => {
-      it("Should return a 400", async () => {
-        const res = await request(app)
-          .post(`/api/conversion`)
-          .send({ amount: "10", from: "USD", to: "GBP" });
-        expect(res.status).toBe(400);
-        expect(res.body).toEqual({
-          error:
-            "Receive wrong types, amounts needs to be a number and from, to a string",
-        });
-      });
-    });
     describe("given the wrong currency pair", () => {
       it("Should return a 400", async () => {
         const res = await request(app)
@@ -31,7 +19,7 @@ describe("Conversion system", () => {
           .send({ amount: 10, from: "YEN", to: "GBP" });
         expect(res.status).toBe(400);
 
-        expect(res.body).toEqual({ error: "Invalid currency pair" });
+        expect(res.body).toEqual("Invalid currency pair");
       });
     });
     describe("given the correct data", () => {

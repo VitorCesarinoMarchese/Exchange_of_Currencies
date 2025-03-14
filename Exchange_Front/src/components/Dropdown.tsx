@@ -19,7 +19,7 @@ function Dropdown({ onChangeValue }: {onChangeValue: (valeu: string) => void}) {
     <div className="relative inline-block">
       <button
         onClick={toggleDropdown}
-        className="px-4 py-3 bg-white w-80 flex justify-between items-center gap-4 text-black rounded-xl border"
+        className="px-4 py-3 bg-white w-80 md:w-[300px] flex justify-between items-center gap-4 text-black rounded-xl border"
       >
         {value} <CaretDown size={14} />
       </button>

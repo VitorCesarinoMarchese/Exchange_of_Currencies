@@ -44,12 +44,14 @@ function Login() {
             placeholder="example@email.com"
             className="text-center"
             change={(e) => setEmail(e.target.value)}
+            w="w-80 md:w-[500px]"
           />
           <Input
             type="password"
             placeholder="Strong Password"
             className="text-center"
             change={(e) => setPassword(e.target.value)}
+            w="w-80 md:w-[500px]"
           />
           {loginError && <p className="text-red-500 text-sm">{loginError}</p>}
 
@@ -57,7 +59,7 @@ function Login() {
             label={loginLoading ? "Logging in..." : "Login"}
             color="secondary"
             classname="mt-3 mb-1"
-            w="w-80"
+            w="w-80 md:w-[500px]"
             disable={loginLoading}
             func={handleSubmit}
           />

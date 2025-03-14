@@ -12,7 +12,10 @@ export const signupService = async (
       password,
     });
     const data = await response.json();
-    return { data, error: null, loading: false };
+    if(response.ok){
+      return { data, error: null, loading: false };
+    }
+    return { data: null, error: "Error trying to signup", loading: false };
   } catch (e) {
     console.error(e);
     return { data: null, error: "Error trying to signup", loading: false };

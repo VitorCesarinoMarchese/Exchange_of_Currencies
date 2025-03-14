@@ -18,7 +18,6 @@ function App() {
           <Route path="/dashboard" element={<Dashboard/>}/>
           <Route path="/history" element={<History/>}/>
         </Route>
-        {/*Create the protecd route*/}
       </Routes>
     </BrowserRouter>
   )

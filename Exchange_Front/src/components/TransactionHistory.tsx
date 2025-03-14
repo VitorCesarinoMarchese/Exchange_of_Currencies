@@ -13,6 +13,12 @@ function TransactionHistory({ reloadTrigger, page = 5 }: { reloadTrigger: boolea
 
   const itemsPerPage = page;
 
+  useEffect(() => {
+    setSortHistory(history);
+    setCurrentPage(1); 
+  }, [location, history]);
+
+
   const formatDate = (transactionDate: string) => {
     const date = new Date(transactionDate);
     const day = String(date.getDate()).padStart(2, "0");
@@ -76,28 +82,28 @@ function TransactionHistory({ reloadTrigger, page = 5 }: { reloadTrigger: boolea
   return (
     <div className="py-4">
       <h2 className="font-bold text-3xl self-start p-2">Transaction History</h2>
-      <div className="max-w-[343px]">
+      <div className="max-w-[343px] md:max-w-[675px]">
         <table className="border-collapse w-full table-fixed rounded-lg overflow-hidden" key={history.length}>
           <thead>
             <tr className="bg-primary text-center rounded-xl">
               <th className="px-2 py-2 text-xs w-1/4">
                 <div className="truncate">
-                  <Btn label="Rate" color="secondary" w="w-full" classname="text-lg font-normal" func={rateFilter} />
+                  <Btn label="Rate" color="secondary" w="w-full" classname="text-lg md:text-xl font-normal" func={rateFilter} />
                 </div>
               </th>
               <th className="px-2 py-2 text-xs w-1/4">
                 <div className="truncate">
-                  <Btn label="Amount" color="secondary" w="w-full" classname="text-lg font-normal" func={amountFilter} />
+                  <Btn label="Amount" color="secondary" w="w-full" classname="text-lg md:text-xl font-normal" func={amountFilter} />
                 </div>
               </th>
               <th className="px-2 py-2 text-xs w-1/4">
                 <div className="truncate">
-                  <Btn label="From" color="secondary" w="w-full" classname="text-lg font-normal" func={fromFilter} />
+                  <Btn label="From" color="secondary" w="w-full" classname="text-lg md:text-xl font-normal" func={fromFilter} />
                 </div>
               </th>
               <th className="px-2 py-2 text-xs w-1/4">
                 <div className="truncate">
-                  <Btn label="Date" color="secondary" w="w-full" classname="text-lg font-normal" func={dateFilter} />
+                  <Btn label="Date" color="secondary" w="w-full" classname="text-lg md:text-xl font-normal" func={dateFilter} />
                 </div>
               </th>
             </tr>
@@ -105,10 +111,10 @@ function TransactionHistory({ reloadTrigger, page = 5 }: { reloadTrigger: boolea
           <tbody className="border">
             {loading ? (
               <tr className="border-b hover:bg-gray-100">
-                <td className="px-4 py-2 text-xs truncate">Loading ...</td>
-                <td className="px-4 py-2 text-xs truncate">Loading ...</td>
-                <td className="px-4 py-2 text-xs truncate">Loading ...</td>
-                <td className="px-4 py-2 text-xs text-center">
+                <td className="px-4 py-2 text-xs md:text-lg truncate">Loading ...</td>
+                <td className="px-4 py-2 text-xs md:text-lg truncate">Loading ...</td>
+                <td className="px-4 py-2 text-xs md:text-lg truncate">Loading ...</td>
+                <td className="px-4 py-2 text-xs md:text-lg text-center">
                   <div className="flex flex-col items-center">
                     <span>Loading .../</span>
                     <span>Loading ...</span>
@@ -120,13 +126,14 @@ function TransactionHistory({ reloadTrigger, page = 5 }: { reloadTrigger: boolea
                 const { formattedDate, formattedYear } = formatDate(row.transaction_date);
                 return (
                   <tr key={row._id} className="border-b hover:bg-gray-100">
-                    <td className="px-4 py-2 text-xs truncate">{Number(row.rate).toFixed(2)}</td>
-                    <td className="px-4 py-2 text-xs truncate">{row.amount}</td>
-                    <td className="px-4 py-2 text-xs truncate">{`${row.from.toUpperCase()}${row.to.toUpperCase()}`}</td>
-                    <td className="px-4 py-2 text-xs text-center">
+                    <td className="px-4 py-2 text-xs md:text-lg truncate">{Number(row.rate).toFixed(2)}</td>
+                    <td className="px-4 py-2 text-xs md:text-lg truncate">{row.amount}</td>
+                    <td className="px-4 py-2 text-xs md:text-lg truncate">{`${row.from.toUpperCase()}${row.to.toUpperCase()}`}</td>
+                    <td className="px-4 py-2 text-xs md:text-lg text-center">
                       <div className="flex flex-col items-center">
-                        <span>{formattedDate}/</span>
-                        <span>{formattedYear}</span>
+                        <span className="hidden md:flex">{formattedDate}/{formattedYear}</span>
+                        <span className="md:hidden">{formattedDate}/</span>
+                        <span className="md:hidden">{formattedYear}</span>
                       </div>
                     </td>
                   </tr>

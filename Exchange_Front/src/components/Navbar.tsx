@@ -11,6 +11,7 @@ function Navbar({ logged }: { logged: boolean }) {
     localStorage.removeItem("refresh_token");
     localStorage.removeItem("user_email");
     localStorage.removeItem("user_id");
+    window.location.reload()
   };
 
   return (
@@ -20,7 +21,7 @@ function Navbar({ logged }: { logged: boolean }) {
       </NavLink>
 
       <button
-        className={hidden ? "" : "hidden"}
+        className={hidden ? "md:hidden" : "hidden"}
         onClick={() => setHidden(false)}
         aria-label="open menu"
       >
@@ -29,11 +30,11 @@ function Navbar({ logged }: { logged: boolean }) {
       {logged ? (
         <ul
           className={`${
-            hidden ? "hidden" : ""
-          } absolute top-0 right-0 bg-primary w-[50%] h-screen flex flex-col gap-8 justify-start pt-20 items-center`}
+            hidden ? "hidden md:flex md:flex-row" : ""
+          } absolute top-0 right-0 bg-primary w-[50%] h-screen flex flex-col gap-8 justify-start pt-20 items-center md:w-fit md:h-24 md:pt-0 md:pr-4 md:items-center`}
         >
           <button
-            className="absolute top-4 right-4"
+            className="absolute top-4 right-4 md:hidden "
             onClick={() => setHidden(true)}
           >
             <X size={40} />

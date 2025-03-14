@@ -40,6 +40,8 @@ export const fetchAuthPostApi = async (endpoin: string, body: object, token: str
             body: JSON.stringify(body)
         })
         if(!response.ok){
+            const r = await response.json()
+            console.log(r)
             throw new Error("Error fetching api");
         }
         return response
@@ -60,6 +62,8 @@ export const fetchPostApi = async (endpoin: string, body: object) => {
             body: JSON.stringify(body)
         })
         if(!response.ok){
+            const r = await response.json()
+            console.log(r)
             throw new Error("Error fetching api");
         }
         return response

@@ -5,9 +5,11 @@ export const loginService = async (email: string, password: string) => {
   try {
     const response = await fetchPostApi("auth/login", { email, password });
     const data: LoginResponse = await response.json();
-    return { data, error: null, loading: false }; 
+    if(response.ok){
+      return { data, error: null, loading: false }; 
+    }
+    return { data: null, error: "Error trying to login", loading: false };
   } catch (error) {
-    console.error(error);
     return { data: null, error: "Error trying to login", loading: false };
   }
 };

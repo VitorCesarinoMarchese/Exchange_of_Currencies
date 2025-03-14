@@ -9,36 +9,36 @@ function Wallet({ reloadTrigger, onChangeValue }: {reloadTrigger: boolean, onCha
   return (
     <div>
       <h2 className="font-bold text-3xl self-start p-2">My wallet</h2>
-      <div className="flex flex-col items-center gap-4 m-4 p-4 bg-primary rounded-lg">
-        <div className="flex justify-center gap-2">
+      <div className="flex flex-col items-center gap-4 m-4 p-4 bg-primary rounded-lg md:w-[675px] md:m-0">
+        <div className="flex justify-center gap-2 md:gap-4">
           <Input
             type="Text"
             placeholder="USD"
             className="placeholder:text-black text-center"
-            w="w-40"
+            w="w-80 md:w-[300px]"
             read={true}
           />
           <Input
             type="Text"
             placeholder="GBP"
             className="placeholder:text-black text-center"
-            w="w-40"
+            w="w-80 md:w-[300px]"
             read={true}
           />
         </div>
-        <div className="flex justify-center gap-2">
+        <div className="flex justify-center gap-2 md:gap-4">
           <Input
             type="Number"
             placeholder={`${loading ? "loading...": walletData?.usd.toFixed(2)}$`}
             className="placeholder:text-black text-center"
-            w="w-40"
+            w="w-80 md:w-[300px]"
             read={true}
           />
           <Input
             type="Number"
             placeholder={`£${loading ? "loading...": walletData?.gbp.toFixed(2)}`}
             className="placeholder:text-black text-center"
-            w="w-40"
+            w="w-80 md:w-[300px]"
             read={true}
           />
         </div>

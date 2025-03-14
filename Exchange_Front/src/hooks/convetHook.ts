@@ -8,55 +8,41 @@ export const useConvert = (userData: {
   amount: string;
 }) => {
   const [data, setData] = useState<ConversionResponse | null>(null);
-  const [error, setError] = useState<ConversionResponse | null>(null);
+  const [error, setError] = useState<string | null>(null); 
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!userData.amount) return;
-    if (Number(userData.amount) <= 0) return;
-    if (Number(userData.amount) == 0) {
-      setData({
-        result: {
-          total: "0",
-          rate: 0,
-        },
-      });
-      return;
-    }
-    let isMounted = true;
-
+    if (!userData.amount || Number(userData.amount) <= 0) return; 
     const fetchData = async () => {
       setLoading(true);
       setError(null);
 
       try {
         const response = await fetchPostApi("conversion", userData);
-        const result = await response.json();
 
-        if (!isMounted) return;
+        let result;
+        try {
+          result = await response.json(); 
+        } catch {
+          setError("Invalid response from server.");
+          setLoading(false);
+          return;
+        }
 
         if (response.status !== 200) {
-          console.log(userData.from, userData.to);
-          setError(result);
-          console.error("Conversion failed:", result);
-          return;
+          setError(result.error || "Conversion failed."); 
         }
 
         setData(result);
       } catch (e) {
-        if (!isMounted) return;
-        console.error("Conversion error:", e);
-        setError({ error: "Conversion failed." });
+        setError("Conversion failed. " + {e}); 
       } finally {
-        if (isMounted) setLoading(false);
+        setLoading(false);
       }
     };
 
     fetchData();
+  }, [userData]); 
 
-    return () => {
-      isMounted = false;
-    };
-  }, [userData]);
   return { data, error, loading };
 };

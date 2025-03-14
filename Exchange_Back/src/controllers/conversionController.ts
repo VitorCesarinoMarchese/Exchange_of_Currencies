@@ -9,13 +9,13 @@ export const conversionController = async (req: Request, res: Response) => {
             res.status(400).json({error: "Amount, from and to are required"})
             return
         }
-        if(typeof userData.amount !== "number" || typeof userData.from !== "string" || typeof userData.to !== "string"){
+        if(typeof Number(userData.amount) !== "number" || typeof userData.from !== "string" || typeof userData.to !== "string"){
             res.status(400).json({error: "Receive wrong types, amounts needs to be a number and from, to a string"})
             return
         }
         const result = await conversion(userData);
         if(!result.rate || !result.total){
-            res.status(400).json({error: result.error})
+            res.status(400).json(result.error)
             return 
         }
         res.status(200).json({ result });

@@ -11,4 +11,5 @@ router.get("/profile", verifyToken, (req: Request, res: Response) => {
     res.status(200).json({ message: "Profile accessed", user: req.body.user });
 });
 
+
 export default router;

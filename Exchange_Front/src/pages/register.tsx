@@ -38,7 +38,6 @@ function Register() {
         }
         
         if(data.message){
-            console.log(data)
             navigate("/login")
         }
     }
@@ -59,24 +58,31 @@ function Register() {
             placeholder="Name"
             className="text-center"
             change={(e) => setName(e.target.value)}
+            w="w-80 md:w-[500px]"
           />
           <Input
             type="email"
             placeholder="example@email.com"
             className="text-center"
             change={(e) => setEmail(e.target.value)}
+            w="w-80 md:w-[500px]"
+
           />
           <Input
             type="password"
             placeholder="Strong Password"
             className="text-center"
             change={(e) => setPassword(e.target.value)}
+            w="w-80 md:w-[500px]"
+
           />
           <Input
             type="password"
             placeholder="Repeat Password"
             className="text-center"
             change={(e) => setConfirmPassword(e.target.value)}
+            w="w-80 md:w-[500px]"
+
           />
           {signupError && <p className="text-red-500 text-sm">{signupError}</p>}
 
@@ -84,7 +90,7 @@ function Register() {
             label={signupError ? "Signuping in..." : "Signup"}
             color="secondary"
             classname="mt-3 mb-1"
-            w="w-80"
+            w="w-80 md:w-[500px]"
             disable={signupLoading}
             func={handleSubmit}
           />

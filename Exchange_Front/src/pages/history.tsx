@@ -4,7 +4,7 @@ import { useLogged } from "../hooks/loggedHook";
 
 function History() {
   useLogged();
-
+  
   return (
     <>
       <Navbar logged={true} />

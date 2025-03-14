@@ -8,8 +8,10 @@ export const useCharts = (chartType: string) => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setChartData([])
+    setChartData([]);
     setLoading(true);
+    setError(null);
+
     fetchGetApi(`chart/${chartType}`)
       .then((data: apiChartModel) => {
         setChartData((prevChart) => [
@@ -25,9 +27,11 @@ export const useCharts = (chartType: string) => {
       })
       .catch((e) => {
         console.error("Error fetching data:", e);
-        setError("Failed to load chart data. Please try again later."); 
+        setError("Failed to load chart data. Please try again later.");
       })
-      .finally(() => setLoading(false));
+      .finally(() => {
+        setLoading(false);
+      });
   }, [chartType]);
 
   return { chartData, loading, error };

@@ -6,9 +6,9 @@ import { ApiLiveRatesResponse } from "../@types/api_response";
 let exchangeRates = { GBPUSD: 1.27, USDGBP: 0.78, TS: Date.now().toString() };
 let reconnectInterval = 1000 * 10;
 
-const subscribers: WebSocket[] = []; // Store connected clients
+const subscribers: WebSocket[] = [];
 
-export const connect = () => {
+export const connect = (disableReconnect = false) => {
     if (!process.env.URL_WEBSOCKET) {
         throw new Error("WebSocket URL is not set in the environment variables.");
     }
@@ -21,7 +21,9 @@ export const connect = () => {
 
     ws.on("close", function () {
         console.log(`socket closed, will reconnect in ${reconnectInterval}`);
-        setTimeout(connect, reconnectInterval);
+        if (!disableReconnect) {
+            setTimeout(() => connect(disableReconnect), reconnectInterval);
+        }
     });
 
     ws.on("message", function incoming(data: string) {
@@ -32,7 +34,6 @@ export const connect = () => {
                 exchangeRates.USDGBP = 1 / parsedData.ask;
                 exchangeRates.TS = parsedData.ts;
 
-                // Broadcast new exchange rates to all WebSocket clients
                 subscribers.forEach(client => {
                     if (client.readyState === WebSocket.OPEN) {
                         client.send(JSON.stringify(exchangeRates));
@@ -45,7 +46,6 @@ export const connect = () => {
     });
 };
 
-// Allow WebSocket clients to subscribe to updates
 export const addSubscriber = (ws: WebSocket) => {
     subscribers.push(ws);
 };
