@@ -63,13 +63,11 @@ export const addFundsController = async (req: Request, res: Response) => {
           res.status(404).json({ error: "User not found" });
           return;
         }
-        if(!user.wallet){
-          res.status(404).json({ error: "User don't have a wallet" });
-          return
+        if(user.wallet){
+          user.wallet = {usd: user.wallet.usd + Number(usd), gbp: user.wallet.gbp + Number(gbp)}
+          await user.save()
+          res.status(200).json({ wallet: user.wallet });
         }
-        user.wallet = {usd: user.wallet.usd + Number(usd), gbp: user.wallet.gbp + Number(gbp)}
-        await user.save()
-        res.status(200).json({ wallet: user.wallet });
       } else {
         res.status(403).json({ error: "Invalid or expired token" });
       }

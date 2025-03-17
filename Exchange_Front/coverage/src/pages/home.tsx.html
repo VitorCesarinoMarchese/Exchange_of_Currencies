@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">96.05% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>66/66</span>
+                <span class='fraction'>73/76</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">16.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>1/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">96.05% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>66/66</span>
+                <span class='fraction'>73/76</span>
             </div>
         
             
@@ -132,7 +132,18 @@
 <a name='L67'></a><a href='#L67'>67</a>
 <a name='L68'></a><a href='#L68'>68</a>
 <a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -142,6 +153,13 @@
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -196,12 +214,15 @@
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import Chart from "../components/Chart";
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useNavigate } from "react-router";
+import Chart from "../components/Chart";
 import CurencyConverter from "../components/CurencyConverter";
 import Hero from "../components/Hero";
 import Infocard from "../components/Infocard";
@@ -210,6 +231,11 @@ import Wallet from "../components/wallet";
 import { useLogged } from "../hooks/loggedHook";
 function Home() {
   const { logged } = useLogged();
+  const navigate = useNavigate();
+  const handleRedirect = <span class="fstat-no" title="function not covered" >() =&gt; {</span>
+<span class="cstat-no" title="statement not covered" >    console.log('https://tradermade.com/')</span>
+<span class="cstat-no" title="statement not covered" >    window.location.href = 'https://tradermade.com/';</span>
+<span class="cstat-no" title="statement not covered" >  };</span>
   if (logged) {
     return (
       &lt;&gt;
@@ -217,7 +243,7 @@ function Home() {
         &lt;Navbar logged={logged} /&gt;
         &lt;div className="flex flex-col items-center p-4 gap-8 md:p-10 md:flex-row md:flex-wrap md:justify-between md:items-start"&gt;
           &lt;div className="flex flex-col justify-between md:h-[330px]"&gt;
-            &lt;Wallet /&gt;
+            &lt;Wallet reloadTrigger={false}/&gt;
             &lt;CurencyConverter className="hidden md:flex md:flex-col mt-8" /&gt;
           &lt;/div&gt;
           &lt;Chart className="hidden md:flex" /&gt;
@@ -228,12 +254,14 @@ function Home() {
             text="Track your recent transactions, like USD to GBP, easily. View details like amounts, exchange rates, and transaction dates."
             label="Transactions"
             className="md:w-[45vw] md:max-w-[45vw]"
+            func={<span class="fstat-no" title="function not covered" >() =&gt; navigate("/history")}</span>
           /&gt;
           &lt;Infocard
             title="Powerd by web sockets"
             text="WebSockets enable real-time communication, allowing the use the most up-to-date live exchange rates."
             label="More Info"
             className="md:w-[45vw] md:max-w-[45vw]"
+            func={<span class="fstat-no" title="function not covered" >() =&gt; handleRedirect()}</span>
           /&gt;
         &lt;/div&gt;
       &lt;/&gt;
@@ -243,7 +271,7 @@ function Home() {
       &lt;&gt;
         &lt;div className="hidden bg-secondary"&gt;&lt;/div&gt;
         &lt;Navbar logged={logged} /&gt;
-        &lt;div className="flex flex-col items-center p-4 gap-8 md:p-10 md:flex-row md:flex-wrap md:justify-between items-start"&gt;
+        &lt;div className="flex flex-col items-center p-4 gap-8 md:p-10 md:flex-row md:flex-wrap md:justify-between md:items-start"&gt;
           &lt;div&gt;
             &lt;Hero /&gt;
             &lt;CurencyConverter className="hidden md:flex md:flex-col mt-8" /&gt;
@@ -256,12 +284,14 @@ function Home() {
             text="Track your recent transactions, like USD to GBP, easily. View details like amounts, exchange rates, and transaction dates."
             label="Transactions"
             className="md:w-[45vw] md:max-w-[45vw]"
+            func={<span class="fstat-no" title="function not covered" >() =&gt; navigate("/login")}</span>
           /&gt;
           &lt;Infocard
             title="Powerd by web sockets"
             text="WebSockets enable real-time communication, allowing the use the most up-to-date live exchange rates."
             label="More Info"
             className="md:w-[45vw] md:max-w-[45vw]"
+            func={<span class="fstat-no" title="function not covered" >() =&gt; handleRedirect()}</span>
           /&gt;
         &lt;/div&gt;
       &lt;/&gt;
@@ -277,7 +307,7 @@ export default Home;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-03-14T12:56:48.594Z
+                at 2025-03-17T10:24:23.230Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

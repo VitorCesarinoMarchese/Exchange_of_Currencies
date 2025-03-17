@@ -30,7 +30,7 @@ function Navbar({ logged }: { logged: boolean }) {
       {logged ? (
         <ul
           className={`${
-            hidden ? "hidden md:flex md:flex-row" : ""
+            hidden ? "hidden md:flex md:flex-row" : "md:flex md:flex-row"
           } absolute top-0 right-0 bg-primary w-[50%] h-screen flex flex-col gap-8 justify-start pt-20 items-center md:w-fit md:h-24 md:pt-0 md:pr-4 md:items-center`}
         >
           <button
@@ -59,11 +59,11 @@ function Navbar({ logged }: { logged: boolean }) {
       ) : (
         <ul
           className={`${
-            hidden ? "hidden" : ""
-          } absolute top-0 right-0 bg-primary w-[50%] h-screen flex flex-col gap-8 justify-start pt-20 items-center`}
+            hidden ? "hidden md:flex md:flex-row" : "md:flex md:flex-row"
+          } absolute top-0 right-0 bg-primary w-[50%] h-screen flex flex-col gap-8 justify-start pt-20 items-center md:w-fit md:h-24 md:pt-0 md:pr-4 md:items-center`}
         >
           <button
-            className="absolute top-4 right-4"
+            className="absolute top-4 right-4 md:hidden"
             onClick={() => setHidden(true)}
             aria-label="close menu"
           >

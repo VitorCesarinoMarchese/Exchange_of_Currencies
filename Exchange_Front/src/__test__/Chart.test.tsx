@@ -76,4 +76,6 @@ describe("Chart Component", () => {
       expect(dayButton).toHaveClass("bg-white");
     });
   });
+
+
 });

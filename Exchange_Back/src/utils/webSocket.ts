@@ -33,12 +33,6 @@ export const connect = (disableReconnect = false) => {
                 exchangeRates.GBPUSD = parsedData.ask;
                 exchangeRates.USDGBP = 1 / parsedData.ask;
                 exchangeRates.TS = parsedData.ts;
-
-                subscribers.forEach(client => {
-                    if (client.readyState === WebSocket.OPEN) {
-                        client.send(JSON.stringify(exchangeRates));
-                    }
-                });
             } catch (error) {
                 console.error("Error parsing message:", error);
             }

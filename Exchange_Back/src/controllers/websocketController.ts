@@ -7,10 +7,22 @@ export const webSocketServer = (wss: WebSocket.Server) => {
 
         addSubscriber(ws);
 
-        ws.send(JSON.stringify(getExchangeRates()));
+        const sendRates = () => {
+            const rates = getExchangeRates();
 
+            
+            wss.clients.forEach(client => {
+                if (client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify(rates));
+                }
+            });
+        };
+
+        sendRates();
         ws.on("close", () => {
             console.log("Client disconnected");
         });
+
+        setInterval(sendRates, 500);
     });
 };

@@ -2,8 +2,24 @@ import { ApiTimeSeriesResponse } from "../@types/api_response";
 
 export const dayChart = async (currency: string) => {
   const today = new Date();
-  const start = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}-00:00`;
-  const end = `${today.getFullYear()}-${today.getMonth() + 1}-${today.getDate()}-${today.getHours()}:00`;
+  let startDate = new Date(today);
+  let endDate = new Date(today);
+  
+  if (today.getDay() === 6 || today.getDay() === 0) { 
+      startDate.setDate(today.getDate() - (today.getDay() === 6 ? 1 : 2)); 
+      endDate.setDate(today.getDate() - (today.getDay() === 6 ? 1 : 2));
+  
+      startDate.setHours(0, 0, 0, 0);  
+      endDate.setHours(23, 0, 0, 0);   
+  } else {
+      startDate.setTime(today.getTime() - 24 * 60 * 60 * 1000);
+  }
+  
+  const formatDate = (date: Date) =>
+      `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}-${date.getHours()}:00`;
+  
+  const start = formatDate(startDate);
+  const end = formatDate(endDate);
 
   try {
     const response = await fetch(

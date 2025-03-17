@@ -16,9 +16,9 @@ function Chart({className = ""}: {className?: string}) {
   const [chartType, setChartType] = useState("day/USDGBP");
 
   const { chartData, loading, error } = useCharts(chartType);
-
+  
   const exchangeRates: exchangeRates | null = useWebsocket();
-
+  
   const handleZoom = (domain: any) => {
     setState({ selectedDomain: domain, zoomedXDomain: domain.x });
   };

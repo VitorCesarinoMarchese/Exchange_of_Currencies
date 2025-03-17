@@ -4,7 +4,7 @@ import {
   weekChart,
   monthChart,
   yearChart,
-} from "../utils/chartFunctions"; // Adjust the path as needed
+} from "../utils/chartFunctions";
 import { ChartApiResponse, Result } from "../@types/chart";
 import createServer from "../config/server";
 
@@ -62,49 +62,180 @@ const { app } = createServer();
       });
     });
 
-    const chartFunctions = [dayChart, weekChart, monthChart, yearChart];
-    const timeFrames = ["day", "week", "month", "year"];
-    chartFunctions.forEach((chartFunction, index) => {
-      describe(`${timeFrames[index]} Chart`, () => {
-        it("should return API data on successful fetch", async () => {
-          const mockData: ChartApiResponse = {
-            result: {
-              base_currency: "USD",
-              end_date: "2025-03-11-14:30",
-              endpoint: "timeseries",
-              quote_currency: "GBP",
-              quotes: [{ close: 1.2, date: "2025-03-11", high: 1.3, low: 1.1, open: 1.2 }],
-              request_time: "dummy",
-              start_date: "2025-03-01-00:00",
-            },
-          };
-
-          global.fetch = jest.fn().mockResolvedValueOnce({
-            ok: true,
-            json: jest.fn().mockResolvedValueOnce(mockData),
-          });
-
-          const result = await chartFunction("USD");
-          expect(result).toEqual(mockData);
-          expect(global.fetch).toHaveBeenCalled();
+    describe("dayChart", () => {
+      it("should return API data on successful fetch", async () => {
+        const mockData: ChartApiResponse = {
+          result: {
+            base_currency: "USD",
+            end_date: "2025-03-11-14:30",
+            endpoint: "timeseries",
+            quote_currency: "GBP",
+            quotes: [{ close: 1.2, date: "2025-03-11", high: 1.3, low: 1.1, open: 1.2 }],
+            request_time: "dummy",
+            start_date: "2025-03-01-00:00",
+          },
+        };
+    
+        global.fetch = jest.fn().mockResolvedValueOnce({
+          ok: true,
+          json: jest.fn().mockResolvedValueOnce(mockData),
         });
-
-        it("should return an error when API response is not OK", async () => {
-          global.fetch = jest.fn().mockResolvedValueOnce({
-            ok: false,
-            status: 400,
-          });
-
-          const result = await chartFunction("USD");
-          expect(result).toEqual({ error: "API request failed with status 400" });
+    
+        const result = await dayChart("USD");
+        expect(result).toEqual(mockData);
+        expect(global.fetch).toHaveBeenCalledTimes(1);
+      });
+    
+      it("should return an error when API response is not OK", async () => {
+        global.fetch = jest.fn().mockResolvedValueOnce({
+          ok: false,
+          status: 400,
         });
-
-        it("should return a default error when fetch fails", async () => {
-          global.fetch = jest.fn().mockRejectedValueOnce(new Error("Network error"));
-
-          const result = await chartFunction("USD");
-          expect(result).toEqual({ error: `Failed to fetch ${timeFrames[index]} chart data` });
-        });
+    
+        const result = await dayChart("USD");
+        expect(result).toEqual({ error: "API request failed with status 400" });
+        expect(global.fetch).toHaveBeenCalledTimes(1);
+      });
+    
+      it("should return a default error when fetch fails", async () => {
+        global.fetch = jest.fn().mockRejectedValueOnce(new Error("Network error"));
+    
+        const result = await dayChart("USD");
+        expect(result).toEqual({ error: "Failed to fetch day chart data" });
+        expect(global.fetch).toHaveBeenCalledTimes(1);
       });
     });
+    
+    describe("weekChart", () => {
+      it("should return API data on successful fetch", async () => {
+        const mockData: ChartApiResponse = {
+          result: {
+            base_currency: "USD",
+            end_date: "2025-03-11-14:30",
+            endpoint: "timeseries",
+            quote_currency: "GBP",
+            quotes: [{ close: 1.2, date: "2025-03-11", high: 1.3, low: 1.1, open: 1.2 }],
+            request_time: "dummy",
+            start_date: "2025-03-01-00:00",
+          },
+        };
+    
+        global.fetch = jest.fn().mockResolvedValueOnce({
+          ok: true,
+          json: jest.fn().mockResolvedValueOnce(mockData),
+        });
+    
+        const result = await weekChart("USD");
+        expect(result).toEqual(mockData);
+        expect(global.fetch).toHaveBeenCalledTimes(1);
+      });
+    
+      it("should return an error when API response is not OK", async () => {
+        global.fetch = jest.fn().mockResolvedValueOnce({
+          ok: false,
+          status: 400,
+        });
+    
+        const result = await weekChart("USD");
+        expect(result).toEqual({ error: "API request failed with status 400" });
+        expect(global.fetch).toHaveBeenCalledTimes(1);
+      });
+    
+      it("should return a default error when fetch fails", async () => {
+        global.fetch = jest.fn().mockRejectedValueOnce(new Error("Network error"));
+    
+        const result = await weekChart("USD");
+        expect(result).toEqual({ error: "Failed to fetch week chart data" });
+        expect(global.fetch).toHaveBeenCalledTimes(1);
+      });
+    });
+    
+    describe("monthChart", () => {
+      it("should return API data on successful fetch", async () => {
+        const mockData: ChartApiResponse = {
+          result: {
+            base_currency: "USD",
+            end_date: "2025-03-11-14:30",
+            endpoint: "timeseries",
+            quote_currency: "GBP",
+            quotes: [{ close: 1.2, date: "2025-03-11", high: 1.3, low: 1.1, open: 1.2 }],
+            request_time: "dummy",
+            start_date: "2025-03-01-00:00",
+          },
+        };
+    
+        global.fetch = jest.fn().mockResolvedValueOnce({
+          ok: true,
+          json: jest.fn().mockResolvedValueOnce(mockData),
+        });
+    
+        const result = await monthChart("USD");
+        expect(result).toEqual(mockData);
+        expect(global.fetch).toHaveBeenCalledTimes(1);
+      });
+    
+      it("should return an error when API response is not OK", async () => {
+        global.fetch = jest.fn().mockResolvedValueOnce({
+          ok: false,
+          status: 400,
+        });
+    
+        const result = await monthChart("USD");
+        expect(result).toEqual({ error: "API request failed with status 400" });
+        expect(global.fetch).toHaveBeenCalledTimes(1);
+      });
+    
+      it("should return a default error when fetch fails", async () => {
+        global.fetch = jest.fn().mockRejectedValueOnce(new Error("Network error"));
+    
+        const result = await monthChart("USD");
+        expect(result).toEqual({ error: "Failed to fetch month chart data" });
+        expect(global.fetch).toHaveBeenCalledTimes(1);
+      });
+    });
+    
+    describe("yearChart", () => {
+      it("should return API data on successful fetch", async () => {
+        const mockData: ChartApiResponse = {
+          result: {
+            base_currency: "USD",
+            end_date: "2025-03-11-14:30",
+            endpoint: "timeseries",
+            quote_currency: "GBP",
+            quotes: [{ close: 1.2, date: "2025-03-11", high: 1.3, low: 1.1, open: 1.2 }],
+            request_time: "dummy",
+            start_date: "2025-03-01-00:00",
+          },
+        };
+    
+        global.fetch = jest.fn().mockResolvedValueOnce({
+          ok: true,
+          json: jest.fn().mockResolvedValueOnce(mockData),
+        });
+    
+        const result = await yearChart("USD");
+        expect(result).toEqual(mockData);
+        expect(global.fetch).toHaveBeenCalledTimes(1);
+      });
+    
+      it("should return an error when API response is not OK", async () => {
+        global.fetch = jest.fn().mockResolvedValueOnce({
+          ok: false,
+          status: 400,
+        });
+    
+        const result = await yearChart("USD");
+        expect(result).toEqual({ error: "API request failed with status 400" });
+        expect(global.fetch).toHaveBeenCalledTimes(1);
+      });
+    
+      it("should return a default error when fetch fails", async () => {
+        global.fetch = jest.fn().mockRejectedValueOnce(new Error("Network error"));
+    
+        const result = await yearChart("USD");
+        expect(result).toEqual({ error: "Failed to fetch year chart data" });
+        expect(global.fetch).toHaveBeenCalledTimes(1);
+      });
+    });
+    
   });
