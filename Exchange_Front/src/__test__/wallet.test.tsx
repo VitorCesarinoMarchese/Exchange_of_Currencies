@@ -42,7 +42,7 @@ describe('Wallet Component', () => {
     (useWallet as any).mockReturnValue({ walletData: { usd: 123.45, gbp: 67.89 }, loading: false, error: null });
     (useLocation as any).mockReturnValue({ pathname: '/dashboard' });
     render(<Wallet reloadTrigger={true} onChangeValue={onChangeValue} />);
-    const button = screen.getByText('Add founds');
+    const button = screen.getByText('Add funds');
     expect(button).toBeInTheDocument();
     fireEvent.click(button);
     await waitFor(() => {
@@ -54,6 +54,6 @@ describe('Wallet Component', () => {
     (useWallet as any).mockReturnValue({ walletData: { usd: 123.45, gbp: 67.89 }, loading: false, error: null });
     (useLocation as any).mockReturnValue({ pathname: '/other' });
     render(<Wallet reloadTrigger={true} onChangeValue={vi.fn()} />);
-    expect(screen.queryByText('Add founds')).not.toBeInTheDocument();
+    expect(screen.queryByText('Add funds')).not.toBeInTheDocument();
   });
 });

@@ -42,7 +42,7 @@ function Wallet({ reloadTrigger, onChangeValue }: {reloadTrigger: boolean, onCha
             read={true}
           />
         </div>
-        {location.pathname == "/dashboard"? <Btn label="Add founds" color="secondary" func={() => onChangeValue(true)}/> : <></>}
+        {location.pathname == "/dashboard"? <Btn label="Add funds" color="secondary" func={() => onChangeValue(true)}/> : <></>}
       </div>
     </div>
   );

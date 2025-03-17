@@ -260,7 +260,7 @@ describe("Exchange System", () => {
           .set("Authorization", "valid-token")
           .send({ currency: "USDGBP", amount: 100000, user_id, rate: 1 });
         expect(res.status).toBe(400);
-        expect(res.body).toEqual({ error: "Insuficient founds" });
+        expect(res.body).toEqual({ error: "Insuficient funds" });
       });
     });
 
