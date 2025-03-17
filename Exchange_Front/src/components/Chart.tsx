@@ -12,73 +12,75 @@ import { useCharts } from "../hooks/chartHook";
 import { useWebsocket } from "../hooks/websocketHook";
 import { exchangeRates } from "../@types/exchangeRates";
 
-function Chart({className = ""}: {className?: string}) {
+function Chart({ className = "" }: { className?: string }) {
   const [state, setState] = useState({});
   const [chartType, setChartType] = useState("day/USDGBP");
 
   const { chartData, loading, error } = useCharts(chartType);
   const loadingData = [
     {
-        "close": 0.77657,
-        "date": "2025-03-10",
-        "high": 0.77742,
-        "low": 0.77254,
-        "open": 0.77399
+      close: 0.77657,
+      date: "2025-03-10",
+      high: 0.77742,
+      low: 0.77254,
+      open: 0.77399,
     },
     {
-        "close": 0.7724,
-        "date": "2025-03-11",
-        "high": 0.77676,
-        "low": 0.77137,
-        "open": 0.77656
+      close: 0.7724,
+      date: "2025-03-11",
+      high: 0.77676,
+      low: 0.77137,
+      open: 0.77656,
     },
     {
-        "close": 0.7714,
-        "date": "2025-03-12",
-        "high": 0.77426,
-        "low": 0.77038,
-        "open": 0.77239
+      close: 0.7714,
+      date: "2025-03-12",
+      high: 0.77426,
+      low: 0.77038,
+      open: 0.77239,
     },
     {
-        "close": 0.77215,
-        "date": "2025-03-13",
-        "high": 0.77377,
-        "low": 0.77088,
-        "open": 0.77139
+      close: 0.77215,
+      date: "2025-03-13",
+      high: 0.77377,
+      low: 0.77088,
+      open: 0.77139,
     },
     {
-        "close": 0.77313,
-        "date": "2025-03-14",
-        "high": 0.77428,
-        "low": 0.77174,
-        "open": 0.77214
+      close: 0.77313,
+      date: "2025-03-14",
+      high: 0.77428,
+      low: 0.77174,
+      open: 0.77214,
     },
     {
-        "close": 0.7711,
-        "date": "2025-03-17",
-        "high": 0.77358,
-        "low": 0.77065,
-        "open": 0.77316
-    }
-]
-  
+      close: 0.7711,
+      date: "2025-03-17",
+      high: 0.77358,
+      low: 0.77065,
+      open: 0.77316,
+    },
+  ];
+
   const exchangeRates: exchangeRates | null = useWebsocket();
-  
-  const handleZoom = (domain:  ZoomDomain) => {
+
+  const handleZoom = (domain: ZoomDomain) => {
     setState({ selectedDomain: domain, zoomedXDomain: domain.x });
   };
 
   if (loading) {
     return (
-      <div className={`bg-primary p-4 max-w-[352px]  md:max-w-[660px] rounded-xl flex flex-col gap-4 ${className}`}>
+      <div
+        className={`bg-primary p-4 max-w-[352px]  md:max-w-[660px] rounded-xl flex flex-col gap-4 ${className}`}
+      >
         {exchangeRates ? (
-        <ul className="text-white md:text-xl">
-           <li>GBP/USD: {exchangeRates.GBPUSD.toFixed(4)}</li>
-          <li>USD/GBP: {exchangeRates.USDGBP.toFixed(4)}</li> 
-        </ul>
-      ) : (
-        <p>Loading Chart...</p>
-      )}
+          <ul className="text-white md:text-xl">
+            <li>GBP/USD: {exchangeRates.GBPUSD.toFixed(4)}</li>
+            <li>USD/GBP: {exchangeRates.USDGBP.toFixed(4)}</li>
+          </ul>
+        ) : (
+          <p>Loading Chart...</p>
+        )}
         <div className="max-w-[375px] bg-white rounded-xl md:max-w-[660px]">
           <h3 className="text-center text-2xl mt-4">Loading...</h3>
           <VictoryChart
@@ -104,8 +106,7 @@ function Chart({className = ""}: {className?: string}) {
               />
             )}
 
-
-            <VictoryCandlestick data={loadingData}/>
+            <VictoryCandlestick data={loadingData} />
           </VictoryChart>
         </div>
         <ul className="flex gap-4 overflow-x-auto whitespace-nowrap -mx-4">
@@ -150,16 +151,20 @@ function Chart({className = ""}: {className?: string}) {
 
   if (error) {
     return (
-      <div className={`bg-primary p-4 max-w-[352px]  md:max-w-[660px] rounded-xl flex flex-col gap-4 ${className}`}>
+      <div
+        className={`bg-primary p-4 max-w-[352px]  md:max-w-[660px] rounded-xl flex flex-col gap-4 ${className}`}
+      >
         {exchangeRates ? (
-        <ul className="text-white md:text-xl">
-           <li>GBP/USD: {exchangeRates.GBPUSD.toFixed(4)}</li>
-          <li>USD/GBP: {exchangeRates.USDGBP.toFixed(4)}</li> 
-        </ul>
-      ) : (
-        <p>Loading...</p>
-      )}
-        <div className="max-w-[375px] bg-white rounded-xl md:max-w-[660px]">Error: {error}</div>
+          <ul className="text-white md:text-xl">
+            <li>GBP/USD: {exchangeRates.GBPUSD.toFixed(4)}</li>
+            <li>USD/GBP: {exchangeRates.USDGBP.toFixed(4)}</li>
+          </ul>
+        ) : (
+          <p>Loading...</p>
+        )}
+        <div className="max-w-[375px] bg-white rounded-xl md:max-w-[660px]">
+          Error: {error}
+        </div>
         <ul className="flex gap-4 overflow-x-auto whitespace-nowrap -mx-4">
           <li>
             <Btn
@@ -201,16 +206,24 @@ function Chart({className = ""}: {className?: string}) {
   }
 
   return (
-    <div className={`bg-primary p-4 max-w-[352px]  md:max-w-[660px] rounded-xl flex flex-col gap-4 ${className}`}>
+    <div
+      className={`bg-primary p-4 max-w-[352px]  md:max-w-[660px] rounded-xl flex flex-col gap-4 ${className}`}
+    >
       {exchangeRates ? (
         <ul className="text-white md:text-xl">
-           <li>GBP/USD: {exchangeRates.GBPUSD.toFixed(4)}</li>
-          <li>USD/GBP: {exchangeRates.USDGBP.toFixed(4)}</li> 
+          <li>GBP/USD: {exchangeRates.GBPUSD.toFixed(4)}</li>
+          <li>USD/GBP: {exchangeRates.USDGBP.toFixed(4)}</li>
         </ul>
       ) : (
         <p>Loading...</p>
       )}
       <div className="max-w-[375px]  md:max-w-[660px] bg-white rounded-xl">
+        <div
+          className="w-full h-[100px] overflow-scroll invisible" // or use opacity-0 or hidden as needed
+          data-testid="scrollable-div"
+        >
+          <div className="h-[200px]">Scrollable Content</div>
+        </div>
         <VictoryChart
           width={375}
           theme={VictoryTheme.clean}
@@ -220,6 +233,7 @@ function Chart({className = ""}: {className?: string}) {
               zoomDimension="x"
               zoomDomain={state.zoomDomain}
               onZoomDomainChange={handleZoom}
+              data-testid="victory-zoom-container"
             />
           }
         >
@@ -227,9 +241,9 @@ function Chart({className = ""}: {className?: string}) {
 
           {chartType !== "year/USDGBP" && (
             <VictoryAxis
-              tickFormat={(t, i) => (i % 2 === 0 ? t : "")} 
+              tickFormat={(t, i) => (i % 2 === 0 ? t : "")}
               style={{
-                tickLabels: { fontSize: 14, angle: -45, padding: 5 }, 
+                tickLabels: { fontSize: 14, angle: -45, padding: 5 },
               }}
             />
           )}
@@ -244,12 +258,12 @@ function Chart({className = ""}: {className?: string}) {
               }}
               style={{
                 tickLabels: {
-                  fontSize: 12, 
-                  angle: 0, 
+                  fontSize: 12,
+                  angle: 0,
                   padding: 5,
                 },
               }}
-              tickCount={4} 
+              tickCount={4}
             />
           )}
 

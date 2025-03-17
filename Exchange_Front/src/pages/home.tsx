@@ -10,7 +10,6 @@ function Home() {
   const { logged } = useLogged();
   const navigate = useNavigate();
   const handleRedirect = () => {
-    console.log('https://tradermade.com/')
     window.location.href = 'https://tradermade.com/';
   };
   if (logged) {
@@ -38,7 +37,7 @@ function Home() {
             text="WebSockets enable real-time communication, allowing the use the most up-to-date live exchange rates."
             label="More Info"
             className="md:w-[45vw] md:max-w-[45vw]"
-            func={() => handleRedirect()}
+            func={handleRedirect}
           />
         </div>
       </>

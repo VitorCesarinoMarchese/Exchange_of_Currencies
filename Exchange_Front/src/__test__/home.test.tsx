@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import Home from '../pages/Home';
 import { vi } from 'vitest';
 import { MemoryRouter } from 'react-router';
@@ -19,10 +19,6 @@ vi.mock('../components/CurencyConverter', () => ({
 
 vi.mock('../components/Hero', () => ({
   default: () => <div>Hero</div>,
-}));
-
-vi.mock('../components/Infocard', () => ({
-  default: ({ title }: { title: string }) => <div>{title}</div>,
 }));
 
 vi.mock('../components/Navbar', () => ({
@@ -46,7 +42,6 @@ describe('Home Component', () => {
         <Home />
       </MemoryRouter>
     );
-
     expect(screen.getByText('Logged In')).toBeInTheDocument();
     expect(screen.getByText('Wallet')).toBeInTheDocument();
   });
@@ -59,9 +54,30 @@ describe('Home Component', () => {
         <Home />
       </MemoryRouter>
     );
-
     expect(screen.getByText('Logged Out')).toBeInTheDocument();
     expect(screen.getByText('Hero')).toBeInTheDocument();
 
   });
+  
+  test('handleRedirect should redirect to tradermade.com', async () => {
+    (useLogged as vi.Mock).mockReturnValue({ logged: false });
+
+    const originalLocation = window.location;
+    delete window.location;
+    window.location = { href: '' } as Location;
+  
+    render(
+      <MemoryRouter>
+        <Home />
+      </MemoryRouter>
+    );
+  
+    const button = screen.getByRole('button', { name: 'More Info' });
+  
+    fireEvent.click(button);
+  
+    expect(window.location.href).toBe('https://tradermade.com/');
+  
+    window.location = originalLocation;
+  })
 });

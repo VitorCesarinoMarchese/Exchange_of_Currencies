@@ -3,7 +3,7 @@ import { vi } from "vitest";
 import Chart from "../components/Chart";
 import { useCharts } from "../hooks/chartHook";
 import { useWebsocket } from "../hooks/websocketHook";
-import React, { act } from "react";
+import React from "react";
 
 vi.mock("../hooks/chartHook", () => ({ useCharts: vi.fn() }));
 vi.mock("../hooks/websocketHook", () => ({ useWebsocket: vi.fn() }));
@@ -13,6 +13,17 @@ describe("Chart Component", () => {
     vi.clearAllMocks();
   });
 
+  beforeAll(() => {
+    // @ts-ignore
+    SVGElement.prototype.getScreenCTM = vi.fn(() => ({
+      // Mock the behavior to return a dummy transformation matrix
+      inverse: () => ({
+        scale: 1,
+        translate: { x: 0, y: 0 },
+      }),
+    }));
+  });
+  
   it("renders loading branch when loading is true", async () => {
     (useCharts as any).mockReturnValue({
       chartData: [],
@@ -153,4 +164,44 @@ describe("Chart Component", () => {
     });
   });
 
+
+  it('calls handleZoom on scroll while loading', () => {
+    (useCharts as any).mockReturnValue({
+      chartData: [],
+      loading: false,
+      error: null,
+    });
+    (useWebsocket as any).mockReturnValue(null);
+
+    const spy = vi.spyOn(React, 'useState').mockImplementation((initialState) => [initialState, vi.fn()]);
+
+    render(<Chart />);
+
+    const zoomContainer = screen.getByTestId('victory-zoom-container');
+
+    fireEvent.wheel(zoomContainer, { deltaY: -100 });
+
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('calls handleZoom on scroll while not loading', () => {
+    (useCharts as any).mockReturnValue({
+      chartData: [
+        { x: new Date().toISOString(), open: 1, close: 2, high: 3, low: 0 },
+      ],
+      loading: false,
+      error: null,
+    });
+    (useWebsocket as any).mockReturnValue(null);
+
+    const spy = vi.spyOn(React, 'useState').mockImplementation((initialState) => [initialState, vi.fn()]);
+
+    render(<Chart />);
+
+    const zoomContainer = screen.getByTestId('victory-zoom-container');
+
+    fireEvent.wheel(zoomContainer, { deltaY: -100 });
+
+    expect(spy).toHaveBeenCalled();
+  });
 });
