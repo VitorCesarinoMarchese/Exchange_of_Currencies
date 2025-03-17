@@ -8,6 +8,15 @@ export default defineConfig({
   test: {
     coverage: {
       reporter: ['text', 'json', 'html'],
+      exclude: [
+        '**/src/@types/**',       
+        '**/src/models/**',        
+        '**/eslint.config.js',     
+        '**/jest.config.js',      
+        '**/vite.config.ts',      
+        '**/main.tsx',             
+        '**/vite-env.d.ts',        
+      ],
       reportsDirectory: './coverage',
     },
     environment: 'jsdom',

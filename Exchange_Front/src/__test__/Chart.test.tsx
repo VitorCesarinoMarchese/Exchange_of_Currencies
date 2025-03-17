@@ -3,6 +3,7 @@ import { vi } from "vitest";
 import Chart from "../components/Chart";
 import { useCharts } from "../hooks/chartHook";
 import { useWebsocket } from "../hooks/websocketHook";
+import React, { act } from "react";
 
 vi.mock("../hooks/chartHook", () => ({ useCharts: vi.fn() }));
 vi.mock("../hooks/websocketHook", () => ({ useWebsocket: vi.fn() }));
@@ -27,7 +28,43 @@ describe("Chart Component", () => {
     expect(svgElements.length).toBeGreaterThan(0);
   });
 
-  it("renders error branch when error is present", async () => {
+  it("renders loading exchangeRates when loading is true", async () => {
+    (useCharts as any).mockReturnValue({
+      chartData: [],
+      loading: true,
+      error: null,
+    });
+    (useWebsocket as any).mockReturnValue(null);
+    render(<Chart />);
+    await waitFor(() => {
+      expect(screen.getByText("Day")).toBeInTheDocument();
+    });
+    expect(screen.getByText("Loading...")).toBeInTheDocument();
+    const svgElements = document.querySelectorAll("svg");
+    expect(svgElements.length).toBeGreaterThan(0);
+  });
+
+  it("renders exchangeRates when loading is true", async () => {
+    (useCharts as any).mockReturnValue({
+      chartData: [],
+      loading: true,
+      error: null,
+    });
+    (useWebsocket as any).mockReturnValue({
+      GBPUSD: 1.27,
+      USDGBP: 0.77,
+      TS: "fake date",
+    });
+    render(<Chart />);
+    await waitFor(() => {
+      expect(screen.getByText("Day")).toBeInTheDocument();
+    });
+    expect(screen.getByText("GBP/USD: 1.2700")).toBeInTheDocument();
+    const svgElements = document.querySelectorAll("svg");
+    expect(svgElements.length).toBeGreaterThan(0);
+  });
+
+  it("renders loading exchangeRates and error branch when error is present", async () => {
     (useCharts as any).mockReturnValue({
       chartData: [],
       loading: false,
@@ -38,6 +75,26 @@ describe("Chart Component", () => {
     await waitFor(() => {
       expect(screen.getByText("Error: Test error")).toBeInTheDocument();
     });
+    expect(screen.getByText("Loading...")).toBeInTheDocument();
+    expect(screen.getByText("Day")).toBeInTheDocument();
+  });
+  
+  it("renders exchangeRates and error branch when error is present", async () => {
+    (useCharts as any).mockReturnValue({
+      chartData: [],
+      loading: false,
+      error: "Test error",
+    });
+    (useWebsocket as any).mockReturnValue({
+      GBPUSD: 1.27,
+      USDGBP: 0.77,
+      TS: "fake date",
+    });
+    render(<Chart />);
+    await waitFor(() => {
+      expect(screen.getByText("Error: Test error")).toBeInTheDocument();
+    });
+    expect(screen.getByText("GBP/USD: 1.2700")).toBeInTheDocument();
     expect(screen.getByText("Day")).toBeInTheDocument();
   });
 
@@ -77,5 +134,23 @@ describe("Chart Component", () => {
     });
   });
 
+  it("renders chart type year", async () => {
+    (useCharts as any).mockReturnValue({
+      chartData: [],
+      loading: false,
+      error: null,
+    });
+    (useWebsocket as any).mockReturnValue(null);
+    render(<Chart />);
+    const dayButton = screen.getByText("Day").closest("button");
+    const yearButton = screen.getByText("Year").closest("button");
+    expect(dayButton).toHaveClass("bg-secondary");
+    expect(yearButton).toHaveClass("bg-white");
+    fireEvent.click(yearButton);
+    await waitFor(() => {
+      expect(yearButton).toHaveClass("bg-secondary");
+      expect(dayButton).toHaveClass("bg-white");
+    });
+  });
 
 });

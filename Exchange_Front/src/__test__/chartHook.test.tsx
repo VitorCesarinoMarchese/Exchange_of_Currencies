@@ -34,7 +34,6 @@ describe('useCharts Hook', () => {
     const { result } = renderHook(() => useCharts(chartType));
 
     await waitFor(() => result.current.loading === false);
-
     expect(result.current.chartData).toEqual([
       {
         close: 1.3,

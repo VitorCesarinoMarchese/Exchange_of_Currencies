@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { dayChart, weekChart, monthChart, yearChart } from "../utils/chartFunctions";
-import { ChartApiResponse } from "../@types/chart";
 
 const isValidCurrency = (currency: string): boolean => {
     return currency === "USDGBP" || currency === "GBPUSD";

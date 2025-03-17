@@ -74,18 +74,57 @@
  *           description: Daily chart data
  *           content:
  *             application/json:
- *               schema:
- *                 type: object
- *                 properties:
- *                   chartData:
- *                     type: array
- *                     items:
- *                       type: object
- *                       properties:
- *                         timestamp:
- *                           type: string
- *                         value:
- *                           type: number
+*               schema:
+*                 type: object
+*                 properties:
+*                   result:
+*                     type: object
+*                     properties:
+*                       base_currency:
+*                         type: string
+*                         example: USD
+*                       end_date:
+*                         type: string
+*                         format: date-time
+*                         example: "2025-03-11 20:00:00"
+*                       endpoint:
+*                         type: string
+*                         example: timeseries
+*                       quote_currency:
+*                         type: string
+*                         example: GBP
+*                       quotes:
+*                         type: array
+*                         items:
+*                           type: object
+*                           properties:
+*                             close:
+*                               type: number
+*                               format: float
+*                               example: 0.77605
+*                             date:
+*                               type: string
+*                               format: date-time
+*                               example: "2025-03-11 00:00:00"
+*                             high:
+*                               type: number
+*                               format: float
+*                               example: 0.77634
+*                             low:
+*                               type: number
+*                               format: float
+*                               example: 0.77597
+*                             open:
+*                               type: number
+*                               format: float
+*                               example: 0.77666
+*                       request_time:
+*                         type: string
+*                         format: date-time
+*                         example: "Tue, 11 Mar 2025 23:56:07 GMT"
+*                       start_date:
+*                         type: string
+*                         example: "2025-03-11-00:00"
  *         400:
  *           description: Invalid currency pair
  *         404:
@@ -110,17 +149,56 @@
  *           content:
  *             application/json:
  *               schema:
- *                 type: object
- *                 properties:
- *                   chartData:
- *                     type: array
- *                     items:
- *                       type: object
- *                       properties:
- *                         timestamp:
- *                           type: string
- *                         value:
- *                           type: number
+*                 type: object
+*                 properties:
+*                   result:
+*                     type: object
+*                     properties:
+*                       base_currency:
+*                         type: string
+*                         example: USD
+*                       end_date:
+*                         type: string
+*                         format: date-time
+*                         example: "2025-03-17"
+*                       endpoint:
+*                         type: string
+*                         example: timeseries
+*                       quote_currency:
+*                         type: string
+*                         example: GBP
+*                       quotes:
+*                         type: array
+*                         items:
+*                           type: object
+*                           properties:
+*                             close:
+*                               type: number
+*                               format: float
+*                               example: 0.77605
+*                             date:
+*                               type: string
+*                               format: date-time
+*                               example: "2025-03-11"
+*                             high:
+*                               type: number
+*                               format: float
+*                               example: 0.77634
+*                             low:
+*                               type: number
+*                               format: float
+*                               example: 0.77597
+*                             open:
+*                               type: number
+*                               format: float
+*                               example: 0.77666
+*                       request_time:
+*                         type: string
+*                         format: date-time
+*                         example: "Tue, 11 Mar 2025 23:56:07 GMT"
+*                       start_date:
+*                         type: string
+*                         example: "2025-03-10"
  *         400:
  *           description: Invalid currency pair
  *         404:
@@ -146,17 +224,56 @@
  *           content:
  *             application/json:
  *               schema:
- *                 type: object
- *                 properties:
- *                   chartData:
- *                     type: array
- *                     items:
- *                       type: object
- *                       properties:
- *                         timestamp:
- *                           type: string
- *                         value:
- *                           type: number
+*                 type: object
+*                 properties:
+*                   result:
+*                     type: object
+*                     properties:
+*                       base_currency:
+*                         type: string
+*                         example: USD
+*                       end_date:
+*                         type: string
+*                         format: date-time
+*                         example: "2025-03-17"
+*                       endpoint:
+*                         type: string
+*                         example: timeseries
+*                       quote_currency:
+*                         type: string
+*                         example: GBP
+*                       quotes:
+*                         type: array
+*                         items:
+*                           type: object
+*                           properties:
+*                             close:
+*                               type: number
+*                               format: float
+*                               example: 0.77605
+*                             date:
+*                               type: string
+*                               format: date-time
+*                               example: "2025-03-11"
+*                             high:
+*                               type: number
+*                               format: float
+*                               example: 0.77634
+*                             low:
+*                               type: number
+*                               format: float
+*                               example: 0.77597
+*                             open:
+*                               type: number
+*                               format: float
+*                               example: 0.77666
+*                       request_time:
+*                         type: string
+*                         format: date-time
+*                         example: "Tue, 11 Mar 2025 23:56:07 GMT"
+*                       start_date:
+*                         type: string
+*                         example: "2025-02-17"
  *         400:
  *           description: Invalid currency pair
  *         404:
@@ -182,17 +299,56 @@
  *           content:
  *             application/json:
  *               schema:
- *                 type: object
- *                 properties:
- *                   chartData:
- *                     type: array
- *                     items:
- *                       type: object
- *                       properties:
- *                         timestamp:
- *                           type: string
- *                         value:
- *                           type: number
+*                 type: object
+*                 properties:
+*                   result:
+*                     type: object
+*                     properties:
+*                       base_currency:
+*                         type: string
+*                         example: USD
+*                       end_date:
+*                         type: string
+*                         format: date-time
+*                         example: "2025-03-17"
+*                       endpoint:
+*                         type: string
+*                         example: timeseries
+*                       quote_currency:
+*                         type: string
+*                         example: GBP
+*                       quotes:
+*                         type: array
+*                         items:
+*                           type: object
+*                           properties:
+*                             close:
+*                               type: number
+*                               format: float
+*                               example: 0.77605
+*                             date:
+*                               type: string
+*                               format: date-time
+*                               example: "2025-03-11"
+*                             high:
+*                               type: number
+*                               format: float
+*                               example: 0.77634
+*                             low:
+*                               type: number
+*                               format: float
+*                               example: 0.77597
+*                             open:
+*                               type: number
+*                               format: float
+*                               example: 0.77666
+*                       request_time:
+*                         type: string
+*                         format: date-time
+*                         example: "Tue, 11 Mar 2025 23:56:07 GMT"
+*                       start_date:
+*                         type: string
+*                         example: "2024-02-17"
  *         400:
  *           description: Invalid currency pair
  *         404:
@@ -322,7 +478,7 @@
  *       summary: Get user profile
  *       description: Fetches the profile information of the logged-in user.
  *       security:
- *         - BearerAuth: []
+ *         - BearerAuth: []  
  *       responses:
  *         200:
  *           description: User profile information
