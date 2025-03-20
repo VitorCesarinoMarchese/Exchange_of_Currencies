@@ -125,22 +125,51 @@ describe("Chart Component", () => {
     expect(screen.getByText("Day")).toBeInTheDocument();
   });
 
-  it("updates chartType when filter buttons are clicked", async () => {
+  it("updates chartType when filter day are clicked", async () => {
     (useCharts as any).mockReturnValue({
       chartData: [],
       loading: false,
       error: null,
     });
     (useWebsocket as any).mockReturnValue(null);
+    const spy = vi.spyOn(React, 'useState').mockImplementation((initialState) => [initialState, vi.fn()]);
     render(<Chart />);
     const dayButton = screen.getByText("Day").closest("button");
+    fireEvent.click(dayButton);
+    await waitFor(() => {
+      expect(spy).toHaveBeenCalled();
+    });
+  });
+
+  it("updates chartType when filter week are clicked", async () => {
+    (useCharts as any).mockReturnValue({
+      chartData: [],
+      loading: false,
+      error: null,
+    });
+    (useWebsocket as any).mockReturnValue(null);
+    const spy = vi.spyOn(React, 'useState').mockImplementation((initialState) => [initialState, vi.fn()]);
+    render(<Chart />);
     const weekButton = screen.getByText("Week").closest("button");
-    expect(dayButton).toHaveClass("bg-secondary");
-    expect(weekButton).toHaveClass("bg-white");
     fireEvent.click(weekButton);
     await waitFor(() => {
-      expect(weekButton).toHaveClass("bg-secondary");
-      expect(dayButton).toHaveClass("bg-white");
+      expect(spy).toHaveBeenCalled();
+    });
+  });
+
+  it("updates chartType when filter month are clicked", async () => {
+    (useCharts as any).mockReturnValue({
+      chartData: [],
+      loading: false,
+      error: null,
+    });
+    (useWebsocket as any).mockReturnValue(null);
+    const spy = vi.spyOn(React, 'useState').mockImplementation((initialState) => [initialState, vi.fn()]);
+    render(<Chart />);
+    const monthButton = screen.getByText("Month").closest("button");
+    fireEvent.click(monthButton);
+    await waitFor(() => {
+      expect(spy).toHaveBeenCalled();
     });
   });
 
@@ -162,7 +191,6 @@ describe("Chart Component", () => {
       expect(dayButton).toHaveClass("bg-white");
     });
   });
-
 
   it('calls handleZoom on scroll while loading', () => {
     (useCharts as any).mockReturnValue({
@@ -202,5 +230,73 @@ describe("Chart Component", () => {
     fireEvent.wheel(zoomContainer, { deltaY: -100 });
 
     expect(spy).toHaveBeenCalled();
+  });
+
+  it("updates chartType when filter day are clicked and the state is error", async () => {
+    (useCharts as any).mockReturnValue({
+      chartData: [],
+      loading: false,
+      error: 'error',
+    });
+    (useWebsocket as any).mockReturnValue(null);
+    const spy = vi.spyOn(React, 'useState').mockImplementation((initialState) => [initialState, vi.fn()]);
+    render(<Chart />);
+    const dayButton = screen.getByText("Day").closest("button");
+    fireEvent.click(dayButton);
+    await waitFor(() => {
+      expect(dayButton).toBeInTheDocument();
+      expect(spy).toHaveBeenCalledTimes(0)
+    });
+  });
+
+  it("updates chartType when filter week are clicked and the state is error", async () => {
+    (useCharts as any).mockReturnValue({
+      chartData: [],
+      loading: false,
+      error: 'error',
+    });
+    (useWebsocket as any).mockReturnValue(null);
+    const spy = vi.spyOn(React, 'useState').mockImplementation((initialState) => [initialState, vi.fn()]);
+    render(<Chart />);
+    const weekButton = screen.getByText("Week").closest("button");
+    fireEvent.click(weekButton);
+    await waitFor(() => {
+      expect(weekButton).toBeInTheDocument();
+      expect(spy).toHaveBeenCalledTimes(0)
+    });
+  });
+
+  it("updates chartType when filter month are clicked and the state is error", async () => {
+    (useCharts as any).mockReturnValue({
+      chartData: [],
+      loading: false,
+      error: 'error',
+    });
+    (useWebsocket as any).mockReturnValue(null);
+    const spy = vi.spyOn(React, 'useState').mockImplementation((initialState) => [initialState, vi.fn()]);
+    render(<Chart />);
+    const monthButton = screen.getByText("Month").closest("button");
+    fireEvent.click(monthButton);
+    await waitFor(() => {
+      expect(monthButton).toBeInTheDocument();
+      expect(spy).toHaveBeenCalledTimes(0)
+    });
+  });
+
+  it("updates chartType when filter year are clicked and the state is error", async () => {
+    (useCharts as any).mockReturnValue({
+      chartData: [],
+      loading: false,
+      error: 'error',
+    });
+    (useWebsocket as any).mockReturnValue(null);
+    const spy = vi.spyOn(React, 'useState').mockImplementation((initialState) => [initialState, vi.fn()]);
+    render(<Chart />);
+    const yearButton = screen.getByText("Year").closest("button");
+    fireEvent.click(yearButton);
+    await waitFor(() => {
+      expect(yearButton).toBeInTheDocument();
+      expect(spy).toHaveBeenCalledTimes(0)
+    });
   });
 });

@@ -35,6 +35,25 @@ describe('Dropdown Component', () => {
     expect(button).toHaveTextContent('GBP');
   });
 
+  it('should go back to the initial value when a new item is selected', () => {
+    const mockOnChangeValue = vi.fn();
+    render(<Dropdown onChangeValue={mockOnChangeValue} />);
+    
+    const button = screen.getByRole('button');
+    fireEvent.click(button);
+    
+    const gbpItem = screen.getByText('GBP');
+    fireEvent.click(gbpItem);
+
+    fireEvent.click(button);
+
+    const usdItem = screen.getByText("USD")
+    fireEvent.click(usdItem);
+
+    expect(mockOnChangeValue).toHaveBeenCalledWith('USD');
+    expect(button).toHaveTextContent('USD');
+  });
+
   it('should close the dropdown after an item is selected', () => {
     render(<Dropdown onChangeValue={() => {}} />);
     

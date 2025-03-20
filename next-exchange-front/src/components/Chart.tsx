@@ -117,7 +117,6 @@ function Chart({ className = "" }: { className?: string }) {
               label="Day"
               w="w-[140px]"
               classname="ml-4"
-              func={() => setChartType("day/USDGBP")}
             />
           </li>
           <li>
@@ -125,7 +124,6 @@ function Chart({ className = "" }: { className?: string }) {
               color={chartType === "week/USDGBP" ? "secondary" : "white"}
               label="Week"
               w="w-[140px]"
-              func={() => setChartType("week/USDGBP")}
             />
           </li>
           <li>
@@ -133,7 +131,6 @@ function Chart({ className = "" }: { className?: string }) {
               color={chartType === "month/USDGBP" ? "secondary" : "white"}
               label="Month"
               w="w-[140px]"
-              func={() => setChartType("month/USDGBP")}
             />
           </li>
           <li>
@@ -142,7 +139,6 @@ function Chart({ className = "" }: { className?: string }) {
               label="Year"
               w="w-[140px]"
               classname="mr-4"
-              func={() => setChartType("year/USDGBP")}
             />
           </li>
         </ul>

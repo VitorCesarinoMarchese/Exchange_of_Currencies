@@ -4,6 +4,7 @@ import CurencyConverter from '../components/CurencyConverter';
 import { useConvert } from '../hooks/convetHook';
 import { usePathname } from 'next/navigation';
 import { exchangeService } from '../services/exchangeService';
+import React from 'react';
 
 vi.mock('../hooks/convetHook', () => ({
   useConvert: vi.fn(),
@@ -33,7 +34,7 @@ describe('CurencyConverter', () => {
     localStorage.clear();
   });
 
-  it('renders heading and inputs', async () => {
+  it('should renders heading and inputs', async () => {
     render(<CurencyConverter onTransaction={onTransaction} />);
     expect(screen.getByText('Curency Convert')).toBeInTheDocument();
     expect(screen.getByPlaceholderText('100')).toBeInTheDocument();
@@ -41,19 +42,19 @@ describe('CurencyConverter', () => {
     expect(screen.getByPlaceholderText('£200')).toBeInTheDocument();
   });
 
-  it('renders Exchange button when on dashboard', async () => {
+  it('should renders Exchange button when on dashboard', async () => {
     (usePathname as vi.mock).mockReturnValue('/dashboard' );
     render(<CurencyConverter onTransaction={onTransaction} />);
     expect(screen.getByText('Exchange')).toBeInTheDocument();
   });
 
-  it('does not render Exchange button when not on dashboard', async () => {
+  it('should does not render Exchange button when not on dashboard', async () => {
     (usePathname as vi.mock).mockReturnValue('/other');
     render(<CurencyConverter onTransaction={onTransaction} />);
     expect(screen.queryByText('Exchange')).not.toBeInTheDocument();
   });
 
-  it('calls exchangeService and onTransaction when Exchange button is clicked with non-negative amount', async () => {
+  it('should calls exchangeService and onTransaction when Exchange button is clicked with non-negative amount', async () => {
     render(<CurencyConverter onTransaction={onTransaction} />);
     const exchangeButton = screen.getByText('Exchange');
     fireEvent.click(exchangeButton);
@@ -63,7 +64,7 @@ describe('CurencyConverter', () => {
     });
   });
 
-  it('does not call exchangeService when amount is negative', async () => {
+  it('should does not call exchangeService when amount is negative', async () => {
     render(<CurencyConverter onTransaction={onTransaction} />);
 
     const amountInput = screen.getByPlaceholderText('100');
@@ -79,4 +80,16 @@ describe('CurencyConverter', () => {
       expect(onTransaction).not.toHaveBeenCalled();
     });
   });
+
+  it('should call setCurrency when the dropdown is used', async () => {
+    render(<CurencyConverter onTransaction={onTransaction} />);
+
+    const button = screen.getByRole('button', {name: "USD"});
+    fireEvent.click(button);
+    
+    const gbpItem = screen.getByText('GBP');
+    fireEvent.click(gbpItem);
+
+    expect(button).toHaveTextContent('GBP');
+  })
 });
