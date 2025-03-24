@@ -24,7 +24,7 @@ export const registerController = async (req: Request, res: Response) => {
 
     const hashPassword = await bcrypt.hash(password, 10);
 
-    await db.query("BEGIN", []);
+    await db.query("BEGIN");
 
     const queryCreationUser = `INSERT INTO users 
     (name, email, password, wallet_id) 
@@ -42,11 +42,11 @@ export const registerController = async (req: Request, res: Response) => {
       wallet.rows[0].id,
     ]);
 
-    await db.query("COMMIT", []);
+    await db.query("COMMIT");
 
     res.status(201).json({ message: "User registered successfully" });
   } catch (e) {
-    await db.query("ROLLBACK", []);
+    await db.query("ROLLBACK");
     console.error("Error in registerController", e);
     res.status(500).json({ error: "Internal server error" });
   }

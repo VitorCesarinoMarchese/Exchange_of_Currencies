@@ -4,6 +4,8 @@ import { validateToken } from "../utils/validateToken";
 import { TransactionModel, TransactionsResponse } from "../models/transaction";
 import { isPositiveNumber } from "../utils/typeValidation";
 import userModel from "../models/user";
+import { TransactionJob } from "../@types/transactionJob";
+import transactionQueue from "../utils/queueUtils";
 
 export const getWalletController = async (req: Request, res: Response) => {
   try {
@@ -70,23 +72,28 @@ export const addFundsController = async (req: Request, res: Response) => {
           res.status(404).json({ error: "User not found" });
           return;
         }
-        const walletQuery = `SELECT * FROM wallets WHERE id = $1`;
-        const oldWallet = (await db.query(walletQuery, [user.wallet_id]))
-        .rows[0];
-        if (oldWallet) {
-          const newWalletQuery = `UPDATE wallets SET usd = $1, gbp = $2 WHERE id = $3;`;
-          const newWallet = await db.query(newWalletQuery, [
-            Number(oldWallet.usd) + usdValue,
-            Number(oldWallet.gbp) + gbpValue,
-            user.wallet_id,
-          ]);
-          const wallet = await db.query(walletQuery, [user.wallet_id]);
-          if (newWallet.rowCount === 0) {
-            res.status(500).json({ error: "Failed to update wallet" });
-            return;
-          }
-          res.status(200).json({ wallet: wallet.rows[0] });
-        }
+
+        const jobData: TransactionJob = {
+          wallet_id: user.wallet_id ? user.wallet_id : 0,
+          user_id: user.id,
+          amount: 0,
+          usd: usdValue,
+          gbp: gbpValue,
+          type: "addFunds",
+          from: "usd",
+          to: "gbp",
+          rate: 0,
+        };
+        const job = await transactionQueue.add(jobData, { delay: 3000 });
+
+        await job.finished();
+
+        const walletResult = await db.query(
+          `SELECT * FROM wallets WHERE id = $1`,
+          [user.wallet_id]
+        );
+        if (!walletResult.rows.length) throw new Error("Wallet not found");
+        res.status(200).json({ wallet: walletResult.rows[0] });
       } else {
         res.status(403).json({ error: "Invalid or expired token" });
       }
@@ -122,40 +129,38 @@ export const postTransaction = async (req: Request, res: Response) => {
           return;
         } else {
           const walletQuery = `SELECT * FROM wallets WHERE id = $1`;
-          const wallet = (await db.query(walletQuery, [user.wallet_id])).rows[0];
+          const wallet = (await db.query(walletQuery, [user.wallet_id]))
+            .rows[0];
           if (wallet) {
-            const newAmount = amount * rate;
-            if (currency == "USDGBP" && wallet.usd - amount < 0) {
+            if (currency == "USDGBP" && Number(wallet.usd) < amount) {
               res.status(400).json({ error: "Insuficient funds" });
               return;
             }
-            if (currency == "GBPUSD" && wallet.gbp - amount < 0) {
+            if (currency == "USDGBP" && Number(wallet.gbp) < amount){
               res.status(400).json({ error: "Insuficient funds" });
               return;
             }
-            if (currency == "USDGBP") {
-              const updateQuery = `UPDATE wallets SET usd = $1, gbp = $2 WHERE id = $3;`;
-              const newValueFrom = (Number(wallet.usd) - amount).toFixed(2);
-              const newValueTo = (Number(wallet.gbp) + newAmount).toFixed(2);
-              await db.query(updateQuery, [newValueFrom, newValueTo, user_id]);
-            } else {
-              const updateQuery = `UPDATE wallets SET usd = $1, gbp = $2 WHERE id = $3;`;
-              const newValueTo = (Number(wallet.usd) + newAmount).toFixed(2);
-              const newValueFrom = (Number(wallet.gbp) - amount).toFixed(2);
-              await db.query(updateQuery, [newValueTo, newValueFrom, user_id]);
-            }
-            const queryTransaction = `INSERT INTO transactions (user_id, amount, "from", "to", rate) VALUES($1, $2, $3, $4, $5) RETURNING *`;
+            const jobData: TransactionJob = {
+              wallet_id: user.wallet_id ? user.wallet_id : 0,
+              user_id: user.id,
+              amount: amount,
+              usd: 0,
+              gbp: 0,
+              type: "exchange",
+              from: currency == "USDGBP" ? "usd" : "gbp",
+              to: currency == "USDGBP" ? "gbp" : "usd",
+              rate: rate,
+            };
+            const job = await transactionQueue.add(jobData, { delay: 3000 });
+
+            await job.finished();
+            const queryTransaction = `SELECT * FROM transactions WHERE user_id = $1 AND amount = $2 ORDER BY transaction_date DESC LIMIT 1;`;
             const transaction: TransactionModel = (
-              await db.query(queryTransaction, [
-                user_id,
-                amount,
-                currency == "USDGBP" ? "usd" : "gbp",
-                currency == "USDGBP" ? "gbp" : "usd",
-                rate,
-              ])
+              await db.query(queryTransaction, [user_id, amount])
             ).rows[0];
-            console.log(transaction)
-            res.status(200).json({ document: transaction, total: amount * rate });
+            res
+              .status(200)
+              .json({ document: transaction, total: amount * rate });
             return;
           }
           res.status(404).json({ error: "User wallet not found" });
@@ -198,7 +203,7 @@ export const getTransactions = async (req: Request, res: Response) => {
       res.status(404).json({ error: "Transactions not found" });
       return;
     }
-    res.status(200).json( {recentTransactions: transactions} );
+    res.status(200).json({ recentTransactions: transactions });
   } catch (e: any) {
     res.status(500).json({ error: e.message || "Internal server error" });
   }
