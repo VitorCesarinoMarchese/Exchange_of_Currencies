@@ -8,6 +8,7 @@ import db from '../config/pgConfig';
 // docker restart redis
 
 const transactionQueue = new Bull('transaction-queue', 'redis://localhost:6379');
+// find the right type of job
 transactionQueue.process(1, async (job) => {
   const { wallet_id, type, user_id, amount, from, to, rate, usd, gbp } = job.data;
 
@@ -52,7 +53,6 @@ transactionQueue.process(1, async (job) => {
     throw e;
   }
 });
-
 transactionQueue.on('completed', (job) => {
   console.log(`Job completed: ${job.id}`);
 });
