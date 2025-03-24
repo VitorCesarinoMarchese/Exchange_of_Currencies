@@ -1,6 +1,12 @@
 import Bull from 'bull';
 import db from '../config/pgConfig'; 
 
+// docker pull redis
+// docker run --name redis -p 6379:6379 -d redis
+// docker ps
+// docker stop redis
+// docker restart redis
+
 const transactionQueue = new Bull('transaction-queue', 'redis://localhost:6379');
 transactionQueue.process(1, async (job) => {
   const { wallet_id, type, user_id, amount, from, to, rate, usd, gbp } = job.data;
