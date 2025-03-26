@@ -6,7 +6,7 @@ function Btn({
   w = "w-fit",
   disable = false
 }: {
-  func?: () => void;
+  func?: ((e: React.MouseEvent) => void) | ((e: React.FormEvent) => void) | (() => void);
   label: string;
   color: string;
   classname?: string;

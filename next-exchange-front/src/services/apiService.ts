@@ -51,7 +51,6 @@ export const fetchAuthPostApi = async (endpoin: string, body: object, token: str
     }
 }
 
-
 export const fetchPostApi = async (endpoin: string, body: object) => {
     try{
         const response = await fetch("http://localhost:3030/api/" + endpoin,{

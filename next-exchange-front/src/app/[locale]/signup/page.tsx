@@ -1,13 +1,15 @@
 "use client";
 import { redirect } from "next/navigation";
 import Link from "next/link";
-import Btn from "../../components/Btn";
-import Input from "../../components/Input";
-import Navbar from "../../components/Navbar";
+import Btn from "../../../components/Btn";
+import Input from "../../../components/Input";
+import Navbar from "../../../components/Navbar";
 import { FormEvent, useState, useEffect } from "react";
-import { signupService } from "../../services/signupService";
+import { signupService } from "../../../services/signupService";
+import { useTranslations } from "next-intl";
 
 function Register() {
+  const t = useTranslations();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -28,13 +30,15 @@ function Register() {
     e.preventDefault();
 
     if (!name || !email || !password || !confirmPassword) {
-      setSignupError("All fields need to be filled");
+      setSignupError(t("All fields need to be filled"));
+      setSignupLoading(false);
       return;
     }
     if (password != confirmPassword) {
       setSignupError(
-        "The password need to be the same of the confirm password"
+        t("The password need to be the same of the confirm password")
       );
+      setSignupLoading(false);
       return;
     }
     setSignupLoading(true);
@@ -44,6 +48,7 @@ function Register() {
 
     if (data.error) {
       setSignupError(error);
+      setSignupLoading(false);
       return;
     }
 
@@ -54,38 +59,38 @@ function Register() {
 
   return (
     <>
-      {localStorage.getItem("access_token") ? redirect("/") : ""}
+      {access_token ? redirect("/") : ""}
       <Navbar logged={false} />
       <div className="flex flex-col items-center mt-8 ">
-        <h1 className="text-3xl font-bold mb-7">Signup</h1>
+        <h1 className="text-3xl font-bold mb-7">{t("Signup")}</h1>
         <form
           onSubmit={handleSubmit}
           className="flex flex-col items-center gap-3"
         >
           <Input
             type="name"
-            placeholder="Name"
+            placeholder={t("Name")}
             className="text-center"
             change={(e) => setName(e.target.value)}
             w="w-80 md:w-[500px]"
           />
           <Input
             type="email"
-            placeholder="example@email.com"
+            placeholder={t("example@email")}
             className="text-center"
             change={(e) => setEmail(e.target.value)}
             w="w-80 md:w-[500px]"
           />
           <Input
             type="password"
-            placeholder="Strong Password"
+            placeholder={t("Strong Password")}
             className="text-center"
             change={(e) => setPassword(e.target.value)}
             w="w-80 md:w-[500px]"
           />
           <Input
             type="password"
-            placeholder="Repeat Password"
+            placeholder={t("Repeat Password")}
             className="text-center"
             change={(e) => setConfirmPassword(e.target.value)}
             w="w-80 md:w-[500px]"
@@ -93,7 +98,7 @@ function Register() {
           {signupError && <p className="text-red-500 text-sm">{signupError}</p>}
 
           <Btn
-            label={signupError ? "Signuping in..." : "Signup"}
+            label={signupLoading ? t("Loading")+"..." : t("Signup")}
             color="secondary"
             classname="mt-3 mb-1"
             w="w-80 md:w-[500px]"
@@ -102,12 +107,12 @@ function Register() {
           />
         </form>
         <p>
-          Already have an account{" "}
+          {t("Already have an account")}{" "}
           <Link
             href={"/login"}
             className="text-accent underline cursor-pointer"
           >
-            click here
+            {t("click here")}
           </Link>
         </p>
       </div>

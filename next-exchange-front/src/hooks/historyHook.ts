@@ -31,7 +31,7 @@ export const useHistory = (trigger: boolean): HistoryHook => {
     )
       .then((response) => response.json())
       .then((data: { recentTransactions: recentTransaction[]  } | {error: string}) => {
-        if(!data.error){
+        if("recentTransactions" in data){
           setHistory(data.recentTransactions);
           setError(null); 
         }else{

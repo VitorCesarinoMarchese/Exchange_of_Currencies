@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:latest
+    container_name: exchange-db
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: Exchange
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: always
+
+  redis:
+    image: redis:latest
+    container_name: exchange-redis
+    ports:
+      - "6379:6379"
+    restart: always
+
+  sql-exchange-back:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sql-exchange-back
+    environment:
+      DB_HOST: db
+      DB_USER: postgres
+      DB_PASSWORD: 161206
+      DB_NAME: Exchange
+      REDIS_HOST: redis  
+      REDIS_PORT: 6379
+    ports:
+      - "3030:3030"
+      - "3031:3031"
+    volumes:
+      - .:/home/node/app
+      - /home/node/app/node_modules
+    depends_on:
+      - db
+      - redis 
+    command: ["npx", "nodemon", "--legacy-watch", "--ext", "js,jsx,ts,tsx", "--exec", "npm", "run", "dev"]
+    restart: always
+
+volumes:
+  postgres-data:
+    driver: local

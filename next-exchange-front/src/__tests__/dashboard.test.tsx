@@ -1,7 +1,9 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import Dashboard from '../app/dashboard/page';
+import Dashboard from '../app/[locale]/dashboard/page';
 import { vi } from 'vitest';
 import { useLogged } from '../hooks/loggedHook';
+import { NextIntlClientProvider } from "next-intl";
+import en from "../../messages/en-us.json";
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -50,7 +52,9 @@ describe('Dashboard Component', () => {
     (useLogged as vi.Mock).mockReturnValue({ logged: true });
 
     render(
-        <Dashboard />
+        <NextIntlClientProvider locale="en-us" messages={en}>
+          <Dashboard />
+        </NextIntlClientProvider>
     );
 
     expect(screen.getByText('Logged In')).toBeInTheDocument();

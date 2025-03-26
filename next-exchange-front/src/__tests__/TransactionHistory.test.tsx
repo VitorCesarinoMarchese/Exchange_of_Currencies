@@ -1,85 +1,184 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { vi } from 'vitest';
-import TransactionHistory from '../components/TransactionHistory';
-import { useHistory } from '../hooks/historyHook';
-import { usePathname } from 'next/navigation';
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { vi } from "vitest";
+import TransactionHistory from "../components/TransactionHistory";
+import { useHistory } from "../hooks/historyHook";
+import { usePathname } from "next/navigation";
+import { NextIntlClientProvider } from "next-intl";
+import en from "../../messages/en-us.json";
+import pt from "../../messages/pt-br.json";
+import es from "../../messages/es-pe.json";
 
-vi.mock('../hooks/historyHook', () => ({ useHistory: vi.fn() }));
-vi.mock('next/navigation', () => ({ usePathname: vi.fn() }));
+vi.mock("../hooks/historyHook", () => ({ useHistory: vi.fn() }));
+vi.mock("next/navigation", () => ({ usePathname: vi.fn() }));
 
-describe('TransactionHistory', () => {
+describe("TransactionHistory", () => {
   const mockTransactions = [
-    { _id: '1', user_id: 'user1', amount: '100', from: 'usd', to: 'gbp', rate: '1.2', transaction_date: '2025-03-12T10:00:00Z', __v: 0 },
-    { _id: '2', user_id: 'user1', amount: '200', from: 'gbp', to: 'usd', rate: '1.5', transaction_date: '2025-03-10T10:00:00Z', __v: 0 },
-    { _id: '3', user_id: 'user1', amount: '150', from: 'eur', to: 'usd', rate: '1.3', transaction_date: '2025-03-11T10:00:00Z', __v: 0 }
+    {
+      _id: "1",
+      user_id: "user1",
+      amount: "100",
+      from: "usd",
+      to: "gbp",
+      rate: "1.2",
+      transaction_date: "2025-03-12T10:00:00Z",
+      __v: 0,
+    },
+    {
+      _id: "2",
+      user_id: "user1",
+      amount: "200",
+      from: "gbp",
+      to: "usd",
+      rate: "1.5",
+      transaction_date: "2025-03-10T10:00:00Z",
+      __v: 0,
+    },
+    {
+      _id: "3",
+      user_id: "user1",
+      amount: "150",
+      from: "eur",
+      to: "usd",
+      rate: "1.3",
+      transaction_date: "2025-03-11T10:00:00Z",
+      __v: 0,
+    },
   ];
   beforeEach(() => {
-    (useHistory as vi.mock).mockReturnValue({ history: mockTransactions, loading: false, error: null });
-    (usePathname as vi.mock).mockReturnValue('/history');
+    (useHistory as vi.mock).mockReturnValue({
+      history: mockTransactions,
+      loading: false,
+      error: null,
+    });
+    (usePathname as vi.mock).mockReturnValue("/history");
   });
 
-  it('renders table headers', async () => {
-    render(<TransactionHistory reloadTrigger={true} />);
-    expect(screen.getByText('Transaction History')).toBeInTheDocument();
-    expect(screen.getByText('Rate')).toBeInTheDocument();
-    expect(screen.getByText('Amount')).toBeInTheDocument();
-    expect(screen.getByText('From')).toBeInTheDocument();
-    expect(screen.getByText('Date')).toBeInTheDocument();
+  it("renders table headers", async () => {
+    render(
+      <NextIntlClientProvider locale="en-us" messages={en}>
+        <TransactionHistory reloadTrigger={true} />
+      </NextIntlClientProvider>
+    );
+    expect(screen.getByText("Transaction History")).toBeInTheDocument();
+    expect(screen.getByText("Rate")).toBeInTheDocument();
+    expect(screen.getByText("Amount")).toBeInTheDocument();
+    expect(screen.getByText("From")).toBeInTheDocument();
+    expect(screen.getByText("Date")).toBeInTheDocument();
   });
-  it('renders transaction rows when history is available', async () => {
-    render(<TransactionHistory reloadTrigger={true} />);
+
+  it("renders transaction rows when history is available", async () => {
+    render(
+      <NextIntlClientProvider locale="en-us" messages={en}>
+        <TransactionHistory reloadTrigger={true} />
+      </NextIntlClientProvider>
+    );
     await waitFor(() => {
-      expect(screen.getByText('1.20')).toBeInTheDocument();
-      expect(screen.getByText('100')).toBeInTheDocument();
-      expect(screen.getByText('USDGBP')).toBeInTheDocument();
-      expect(screen.getByText('12/03/')).toBeInTheDocument();
+      expect(screen.getByText("1.20")).toBeInTheDocument();
+      expect(screen.getByText("100")).toBeInTheDocument();
+      expect(screen.getByText("USDGBP")).toBeInTheDocument();
+      expect(screen.getByText("12/03/")).toBeInTheDocument();
     });
   });
 
-  it('renders loading row when loading is true', async () => {
-    (useHistory as vi.mock).mockReturnValue({ history: [], loading: true, error: null });
-    render(<TransactionHistory reloadTrigger={true} />);
+  it("renders transaction rows when history is available in pt-br", async () => {
+    render(
+      <NextIntlClientProvider locale="pt-br" messages={pt}>
+        <TransactionHistory reloadTrigger={true} />
+      </NextIntlClientProvider>
+    );
     await waitFor(() => {
-      expect(screen.getByText('Loading .../')).toBeInTheDocument();
+      expect(screen.getByText("Taxa")).toBeInTheDocument();
+      expect(screen.getByText("1.20")).toBeInTheDocument();
+      expect(screen.getByText("100")).toBeInTheDocument();
+      expect(screen.getByText("USDGBP")).toBeInTheDocument();
+      expect(screen.getByText("12/03/")).toBeInTheDocument();
+    });
+  });
+
+  it("renders transaction rows when history is available in es-pe", async () => {
+    render(
+      <NextIntlClientProvider locale="es-pe" messages={es}>
+        <TransactionHistory reloadTrigger={true} />
+      </NextIntlClientProvider>
+    );
+    await waitFor(() => {
+      expect(screen.getByText("Tasa")).toBeInTheDocument();
+      expect(screen.getByText("1.20")).toBeInTheDocument();
+      expect(screen.getByText("100")).toBeInTheDocument();
+      expect(screen.getByText("USDGBP")).toBeInTheDocument();
+      expect(screen.getByText("12/03/")).toBeInTheDocument();
+    });
+  });
+
+
+  it("renders loading row when loading is true", async () => {
+    (useHistory as vi.mock).mockReturnValue({
+      history: [],
+      loading: true,
+      error: null,
+    });
+    render(
+      <NextIntlClientProvider locale="en-us" messages={en}>
+        <TransactionHistory reloadTrigger={true} />
+      </NextIntlClientProvider>
+    );
+    await waitFor(() => {
+      expect(screen.getByText("Loading .../")).toBeInTheDocument();
     });
   });
 
   it('renders "No transactions found." when history is empty', async () => {
-    (useHistory as vi.mock).mockReturnValue({ history: [], loading: false, error: null });
-    render(<TransactionHistory reloadTrigger={true} />);
+    (useHistory as vi.mock).mockReturnValue({
+      history: [],
+      loading: false,
+      error: null,
+    });
+    render(
+      <NextIntlClientProvider locale="en-us" messages={en}>
+        <TransactionHistory reloadTrigger={true} />
+      </NextIntlClientProvider>
+    );
     await waitFor(() => {
-      expect(screen.getByText('No transactions found.')).toBeInTheDocument();
+      expect(screen.getByText("No transactions found.")).toBeInTheDocument();
     });
   });
 
-  it('handles pagination buttons', async () => {
-    render(<TransactionHistory reloadTrigger={true} page={1} />);
+  it("handles pagination buttons", async () => {
+    render(
+      <NextIntlClientProvider locale="en-us" messages={en}>
+        <TransactionHistory reloadTrigger={true} page={1} />
+      </NextIntlClientProvider>
+    );
     await waitFor(() => {
-      expect(screen.getByText('Page 1 of 3')).toBeInTheDocument();
+      expect(screen.getByText("Page 1 of 3")).toBeInTheDocument();
     });
-    const nextButton = screen.getByText('Next');
-    const backButton = screen.getByText('Back');
+    const nextButton = screen.getByText("Next");
+    const backButton = screen.getByText("Back");
     expect(backButton).toBeDisabled();
     fireEvent.click(nextButton);
     await waitFor(() => {
-      expect(screen.getByText('Page 2 of 3')).toBeInTheDocument();
+      expect(screen.getByText("Page 2 of 3")).toBeInTheDocument();
     });
     fireEvent.click(nextButton);
     await waitFor(() => {
-      expect(screen.getByText('Page 3 of 3')).toBeInTheDocument();
+      expect(screen.getByText("Page 3 of 3")).toBeInTheDocument();
     });
     fireEvent.click(backButton);
     await waitFor(() => {
-      expect(screen.getByText('Page 2 of 3')).toBeInTheDocument();
+      expect(screen.getByText("Page 2 of 3")).toBeInTheDocument();
     });
   });
 
-  it('triggers filter functions when filter buttons are clicked', async () => {
-    render(<TransactionHistory reloadTrigger={true} />);
-    const rateButton = screen.getByText('Rate');
-    const amountButton = screen.getByText('Amount');
-    const fromButton = screen.getByText('From');
-    const dateButton = screen.getByText('Date');
+  it("triggers filter functions when filter buttons are clicked", async () => {
+    render(
+      <NextIntlClientProvider locale="en-us" messages={en}>
+        <TransactionHistory reloadTrigger={true} />
+      </NextIntlClientProvider>
+    );
+    const rateButton = screen.getByText("Rate");
+    const amountButton = screen.getByText("Amount");
+    const fromButton = screen.getByText("From");
+    const dateButton = screen.getByText("Date");
     fireEvent.click(rateButton);
     fireEvent.click(amountButton);
     fireEvent.click(fromButton);

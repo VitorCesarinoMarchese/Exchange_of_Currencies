@@ -4,6 +4,10 @@ import Chart from "../components/Chart";
 import { useCharts } from "../hooks/chartHook";
 import { useWebsocket } from "../hooks/websocketHook";
 import React from "react";
+import { NextIntlClientProvider } from "next-intl";
+import en from "../../messages/en-us.json";
+import pt from "../../messages/pt-br.json";
+import es from "../../messages/es-pe.json";
 
 vi.mock("../hooks/chartHook", () => ({ useCharts: vi.fn() }));
 vi.mock("../hooks/websocketHook", () => ({ useWebsocket: vi.fn() }));
@@ -22,7 +26,7 @@ describe("Chart Component", () => {
       }),
     }));
   });
-  
+
   it("renders loading branch when loading is true", async () => {
     (useCharts as any).mockReturnValue({
       chartData: [],
@@ -30,7 +34,11 @@ describe("Chart Component", () => {
       error: null,
     });
     (useWebsocket as any).mockReturnValue(null);
-    render(<Chart />);
+    render(
+      <NextIntlClientProvider locale="en-us" messages={en}>
+        <Chart />
+      </NextIntlClientProvider>
+    );
     await waitFor(() => {
       expect(screen.getByText("Day")).toBeInTheDocument();
     });
@@ -45,7 +53,11 @@ describe("Chart Component", () => {
       error: null,
     });
     (useWebsocket as any).mockReturnValue(null);
-    render(<Chart />);
+    render(
+      <NextIntlClientProvider locale="en-us" messages={en}>
+        <Chart />
+      </NextIntlClientProvider>
+    );
     await waitFor(() => {
       expect(screen.getByText("Day")).toBeInTheDocument();
     });
@@ -65,7 +77,11 @@ describe("Chart Component", () => {
       USDGBP: 0.77,
       TS: "fake date",
     });
-    render(<Chart />);
+    render(
+      <NextIntlClientProvider locale="en-us" messages={en}>
+        <Chart />
+      </NextIntlClientProvider>
+    );
     await waitFor(() => {
       expect(screen.getByText("Day")).toBeInTheDocument();
     });
@@ -81,14 +97,18 @@ describe("Chart Component", () => {
       error: "Test error",
     });
     (useWebsocket as any).mockReturnValue(null);
-    render(<Chart />);
+    render(
+      <NextIntlClientProvider locale="en-us" messages={en}>
+        <Chart />
+      </NextIntlClientProvider>
+    );
     await waitFor(() => {
       expect(screen.getByText("Error: Test error")).toBeInTheDocument();
     });
     expect(screen.getByText("Loading...")).toBeInTheDocument();
     expect(screen.getByText("Day")).toBeInTheDocument();
   });
-  
+
   it("renders exchangeRates and error branch when error is present", async () => {
     (useCharts as any).mockReturnValue({
       chartData: [],
@@ -100,7 +120,11 @@ describe("Chart Component", () => {
       USDGBP: 0.77,
       TS: "fake date",
     });
-    render(<Chart />);
+    render(
+      <NextIntlClientProvider locale="en-us" messages={en}>
+        <Chart />
+      </NextIntlClientProvider>
+    );
     await waitFor(() => {
       expect(screen.getByText("Error: Test error")).toBeInTheDocument();
     });
@@ -117,12 +141,58 @@ describe("Chart Component", () => {
       error: null,
     });
     (useWebsocket as any).mockReturnValue({ GBPUSD: 1.2345, USDGBP: 0.81 });
-    render(<Chart />);
+    render(
+      <NextIntlClientProvider locale="en-us" messages={en}>
+        <Chart />
+      </NextIntlClientProvider>
+    );
     await waitFor(() => {
       expect(screen.getByText("GBP/USD: 1.2345")).toBeInTheDocument();
       expect(screen.getByText("USD/GBP: 0.8100")).toBeInTheDocument();
     });
     expect(screen.getByText("Day")).toBeInTheDocument();
+  });
+
+  it("renders main branch when data is available in pt-br", async () => {
+    (useCharts as any).mockReturnValue({
+      chartData: [
+        { x: new Date().toISOString(), open: 1, close: 2, high: 3, low: 0 },
+      ],
+      loading: false,
+      error: null,
+    });
+    (useWebsocket as any).mockReturnValue({ GBPUSD: 1.2345, USDGBP: 0.81 });
+    render(
+      <NextIntlClientProvider locale="pt-br" messages={pt}>
+        <Chart />
+      </NextIntlClientProvider>
+    );
+    await waitFor(() => {
+      expect(screen.getByText("GBP/USD: 1.2345")).toBeInTheDocument();
+      expect(screen.getByText("USD/GBP: 0.8100")).toBeInTheDocument();
+    });
+    expect(screen.getByText("Dia")).toBeInTheDocument();
+  });
+
+  it("renders main branch when data is available in es-pe", async () => {
+    (useCharts as any).mockReturnValue({
+      chartData: [
+        { x: new Date().toISOString(), open: 1, close: 2, high: 3, low: 0 },
+      ],
+      loading: false,
+      error: null,
+    });
+    (useWebsocket as any).mockReturnValue({ GBPUSD: 1.2345, USDGBP: 0.81 });
+    render(
+      <NextIntlClientProvider locale="es-pe" messages={es}>
+        <Chart />
+      </NextIntlClientProvider>
+    );
+    await waitFor(() => {
+      expect(screen.getByText("GBP/USD: 1.2345")).toBeInTheDocument();
+      expect(screen.getByText("USD/GBP: 0.8100")).toBeInTheDocument();
+    });
+    expect(screen.getByText("Día")).toBeInTheDocument();
   });
 
   it("updates chartType when filter day are clicked", async () => {
@@ -132,8 +202,14 @@ describe("Chart Component", () => {
       error: null,
     });
     (useWebsocket as any).mockReturnValue(null);
-    const spy = vi.spyOn(React, 'useState').mockImplementation((initialState) => [initialState, vi.fn()]);
-    render(<Chart />);
+    const spy = vi
+      .spyOn(React, "useState")
+      .mockImplementation((initialState) => [initialState, vi.fn()]);
+    render(
+      <NextIntlClientProvider locale="en-us" messages={en}>
+        <Chart />
+      </NextIntlClientProvider>
+    );
     const dayButton = screen.getByText("Day").closest("button");
     fireEvent.click(dayButton);
     await waitFor(() => {
@@ -148,8 +224,14 @@ describe("Chart Component", () => {
       error: null,
     });
     (useWebsocket as any).mockReturnValue(null);
-    const spy = vi.spyOn(React, 'useState').mockImplementation((initialState) => [initialState, vi.fn()]);
-    render(<Chart />);
+    const spy = vi
+      .spyOn(React, "useState")
+      .mockImplementation((initialState) => [initialState, vi.fn()]);
+    render(
+      <NextIntlClientProvider locale="en-us" messages={en}>
+        <Chart />
+      </NextIntlClientProvider>
+    );
     const weekButton = screen.getByText("Week").closest("button");
     fireEvent.click(weekButton);
     await waitFor(() => {
@@ -164,8 +246,14 @@ describe("Chart Component", () => {
       error: null,
     });
     (useWebsocket as any).mockReturnValue(null);
-    const spy = vi.spyOn(React, 'useState').mockImplementation((initialState) => [initialState, vi.fn()]);
-    render(<Chart />);
+    const spy = vi
+      .spyOn(React, "useState")
+      .mockImplementation((initialState) => [initialState, vi.fn()]);
+    render(
+      <NextIntlClientProvider locale="en-us" messages={en}>
+        <Chart />
+      </NextIntlClientProvider>
+    );
     const monthButton = screen.getByText("Month").closest("button");
     fireEvent.click(monthButton);
     await waitFor(() => {
@@ -180,7 +268,11 @@ describe("Chart Component", () => {
       error: null,
     });
     (useWebsocket as any).mockReturnValue(null);
-    render(<Chart />);
+    render(
+      <NextIntlClientProvider locale="en-us" messages={en}>
+        <Chart />
+      </NextIntlClientProvider>
+    );
     const dayButton = screen.getByText("Day").closest("button");
     const yearButton = screen.getByText("Year").closest("button");
     expect(dayButton).toHaveClass("bg-secondary");
@@ -192,7 +284,7 @@ describe("Chart Component", () => {
     });
   });
 
-  it('calls handleZoom on scroll while loading', () => {
+  it("calls handleZoom on scroll while loading", () => {
     (useCharts as any).mockReturnValue({
       chartData: [],
       loading: false,
@@ -200,18 +292,23 @@ describe("Chart Component", () => {
     });
     (useWebsocket as any).mockReturnValue(null);
 
-    const spy = vi.spyOn(React, 'useState').mockImplementation((initialState) => [initialState, vi.fn()]);
+    const spy = vi
+      .spyOn(React, "useState")
+      .mockImplementation((initialState) => [initialState, vi.fn()]);
 
-    render(<Chart />);
-
-    const zoomContainer = screen.getByTestId('victory-zoom-container');
+    render(
+      <NextIntlClientProvider locale="en-us" messages={en}>
+        <Chart />
+      </NextIntlClientProvider>
+    );
+    const zoomContainer = screen.getByTestId("victory-zoom-container");
 
     fireEvent.wheel(zoomContainer, { deltaY: -100 });
 
     expect(spy).toHaveBeenCalled();
   });
 
-  it('calls handleZoom on scroll while not loading', () => {
+  it("calls handleZoom on scroll while not loading", () => {
     (useCharts as any).mockReturnValue({
       chartData: [
         { x: new Date().toISOString(), open: 1, close: 2, high: 3, low: 0 },
@@ -221,11 +318,16 @@ describe("Chart Component", () => {
     });
     (useWebsocket as any).mockReturnValue(null);
 
-    const spy = vi.spyOn(React, 'useState').mockImplementation((initialState) => [initialState, vi.fn()]);
+    const spy = vi
+      .spyOn(React, "useState")
+      .mockImplementation((initialState) => [initialState, vi.fn()]);
 
-    render(<Chart />);
-
-    const zoomContainer = screen.getByTestId('victory-zoom-container');
+    render(
+      <NextIntlClientProvider locale="en-us" messages={en}>
+        <Chart />
+      </NextIntlClientProvider>
+    );
+    const zoomContainer = screen.getByTestId("victory-zoom-container");
 
     fireEvent.wheel(zoomContainer, { deltaY: -100 });
 
@@ -236,16 +338,22 @@ describe("Chart Component", () => {
     (useCharts as any).mockReturnValue({
       chartData: [],
       loading: false,
-      error: 'error',
+      error: "error",
     });
     (useWebsocket as any).mockReturnValue(null);
-    const spy = vi.spyOn(React, 'useState').mockImplementation((initialState) => [initialState, vi.fn()]);
-    render(<Chart />);
+    const spy = vi
+      .spyOn(React, "useState")
+      .mockImplementation((initialState) => [initialState, vi.fn()]);
+    render(
+      <NextIntlClientProvider locale="en-us" messages={en}>
+        <Chart />
+      </NextIntlClientProvider>
+    );
     const dayButton = screen.getByText("Day").closest("button");
     fireEvent.click(dayButton);
     await waitFor(() => {
       expect(dayButton).toBeInTheDocument();
-      expect(spy).toHaveBeenCalledTimes(0)
+      expect(spy).toHaveBeenCalledTimes(0);
     });
   });
 
@@ -253,16 +361,22 @@ describe("Chart Component", () => {
     (useCharts as any).mockReturnValue({
       chartData: [],
       loading: false,
-      error: 'error',
+      error: "error",
     });
     (useWebsocket as any).mockReturnValue(null);
-    const spy = vi.spyOn(React, 'useState').mockImplementation((initialState) => [initialState, vi.fn()]);
-    render(<Chart />);
+    const spy = vi
+      .spyOn(React, "useState")
+      .mockImplementation((initialState) => [initialState, vi.fn()]);
+    render(
+      <NextIntlClientProvider locale="en-us" messages={en}>
+        <Chart />
+      </NextIntlClientProvider>
+    );
     const weekButton = screen.getByText("Week").closest("button");
     fireEvent.click(weekButton);
     await waitFor(() => {
       expect(weekButton).toBeInTheDocument();
-      expect(spy).toHaveBeenCalledTimes(0)
+      expect(spy).toHaveBeenCalledTimes(0);
     });
   });
 
@@ -270,16 +384,22 @@ describe("Chart Component", () => {
     (useCharts as any).mockReturnValue({
       chartData: [],
       loading: false,
-      error: 'error',
+      error: "error",
     });
     (useWebsocket as any).mockReturnValue(null);
-    const spy = vi.spyOn(React, 'useState').mockImplementation((initialState) => [initialState, vi.fn()]);
-    render(<Chart />);
+    const spy = vi
+      .spyOn(React, "useState")
+      .mockImplementation((initialState) => [initialState, vi.fn()]);
+    render(
+      <NextIntlClientProvider locale="en-us" messages={en}>
+        <Chart />
+      </NextIntlClientProvider>
+    );
     const monthButton = screen.getByText("Month").closest("button");
     fireEvent.click(monthButton);
     await waitFor(() => {
       expect(monthButton).toBeInTheDocument();
-      expect(spy).toHaveBeenCalledTimes(0)
+      expect(spy).toHaveBeenCalledTimes(0);
     });
   });
 
@@ -287,16 +407,22 @@ describe("Chart Component", () => {
     (useCharts as any).mockReturnValue({
       chartData: [],
       loading: false,
-      error: 'error',
+      error: "error",
     });
     (useWebsocket as any).mockReturnValue(null);
-    const spy = vi.spyOn(React, 'useState').mockImplementation((initialState) => [initialState, vi.fn()]);
-    render(<Chart />);
+    const spy = vi
+      .spyOn(React, "useState")
+      .mockImplementation((initialState) => [initialState, vi.fn()]);
+    render(
+      <NextIntlClientProvider locale="en-us" messages={en}>
+        <Chart />
+      </NextIntlClientProvider>
+    );
     const yearButton = screen.getByText("Year").closest("button");
     fireEvent.click(yearButton);
     await waitFor(() => {
       expect(yearButton).toBeInTheDocument();
-      expect(spy).toHaveBeenCalledTimes(0)
+      expect(spy).toHaveBeenCalledTimes(0);
     });
   });
 });

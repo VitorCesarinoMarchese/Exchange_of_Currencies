@@ -76,7 +76,7 @@ describe("Auth system", () => {
           message: "Login successful",
           accessToken: expect.any(String),
           refreshToken: expect.any(String),
-          user: { id: 1, email: expect.any(String) },
+          user: { id: 17, email: expect.any(String) },
         });
       });
     });

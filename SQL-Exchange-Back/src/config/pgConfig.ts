@@ -1,10 +1,10 @@
 import { Pool } from 'pg';
 
 const pool = new Pool({
-  user: 'postgres',
-  host: 'localhost',
-  database: 'Exchange', 
-  password: String(process.env.POSTGRESS_PASSWORD), 
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,  // This should be 'db' according to Docker Compose
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
   port: 5432, 
 });
 

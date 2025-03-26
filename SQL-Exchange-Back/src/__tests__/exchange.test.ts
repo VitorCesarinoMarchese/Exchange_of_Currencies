@@ -6,9 +6,11 @@ import { validateToken } from "../utils/validateToken";
 jest.mock("../utils/validateToken", () => ({
   validateToken: jest.fn(),
 }));
-
+jest.setTimeout(10000);
 const { app } = createServer();
-
+beforeAll(() => {
+  jest.clearAllMocks();
+});
 describe("Exchange System", () => {
   describe("Get Wallet", () => {
     describe("given the Authorization token is missing", () => {
@@ -47,10 +49,11 @@ describe("Exchange System", () => {
     describe("given the user exists and has a wallet", () => {
       it("Should return a 200", async () => {
         (validateToken as jest.Mock).mockReturnValue(true);
-        const userId = 1;
+        const userId = 17;
         const res = await request(app)
           .get(`/api/exchange/wallet/${userId}`)
           .set("Authorization", "valid-token");
+        console.log(res.body)
         expect(res.status).toBe(200);
         expect(res.body).toEqual({
           wallet: {
@@ -130,7 +133,7 @@ describe("Exchange System", () => {
     describe("given the user exists and has a wallet", () => {
       it("Should return a 200", async () => {
         (validateToken as jest.Mock).mockReturnValue(true);
-        const userId = 1;
+        const userId = 17;
         const res = await request(app)
           .post(`/api/exchange/addfunds/${userId}`)
           .set("Authorization", "valid-token")
@@ -214,7 +217,7 @@ describe("Exchange System", () => {
     describe("given the user does not have enought funds", () => {
       it("Should return a 400", async () => {
         (validateToken as jest.Mock).mockReturnValue(true);
-        const user_id = 1;
+        const user_id = 17;
         const res = await request(app)
           .post(`/api/exchange/transaction`)
           .set("Authorization", "valid-token")
@@ -227,7 +230,7 @@ describe("Exchange System", () => {
     describe("given the user have enought funds", () => {
       it("Should return a 200", async () => {
         (validateToken as jest.Mock).mockReturnValue(true);
-        const user_id = 1;
+        const user_id = 17;
         const res = await request(app)
           .post(`/api/exchange/transaction`)
           .set("Authorization", "valid-token")
@@ -288,7 +291,7 @@ describe("Exchange System", () => {
     describe("given the user does not have transactions", () => {
       it("Should return a 404", async () => {
         (validateToken as jest.Mock).mockReturnValue(true);
-        const user_id = 2;
+        const user_id = 19;
         const res = await request(app)
           .get(`/api/exchange/transaction_history/${user_id}`)
           .set("Authorization", "valid-token");
@@ -300,7 +303,7 @@ describe("Exchange System", () => {
     describe("given the user does have transactions", () => {
       it("Should return a 200", async () => {
         (validateToken as jest.Mock).mockReturnValue(true);
-        const user_id = 1;
+        const user_id = 17;
         const res = await request(app)
           .get(`/api/exchange/transaction_history/${user_id}`)
           .set("Authorization", "valid-token");

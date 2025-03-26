@@ -3,8 +3,12 @@ import { List, X } from "@phosphor-icons/react";
 import Btn from "./Btn";
 import { useState } from "react";
 import Link from 'next/link'
-
+import { useTranslations } from "next-intl";
+import { redirect } from "next/navigation";
 function Navbar({ logged }: { logged: boolean }) {
+
+  const t = useTranslations();
+
   const [hidden, setHidden] = useState(true);
 
   const handleLogout = () => {
@@ -12,7 +16,7 @@ function Navbar({ logged }: { logged: boolean }) {
     localStorage.removeItem("refresh_token");
     localStorage.removeItem("user_email");
     localStorage.removeItem("user_id");
-    window.location.reload()
+    redirect("/")
   };
 
   return (
@@ -43,17 +47,17 @@ function Navbar({ logged }: { logged: boolean }) {
 
           <li>
             <Link href={"/dashboard"}>
-              <Btn color="secondary" label="My account" />
+              <Btn color="secondary" label={t("My account")} />
             </Link>
           </li>
           <li>
             <Link href={"/history"}>
-              <Btn color="secondary" label="History" />
+              <Btn color="secondary" label={t("History")} />
             </Link>
           </li>
           <li>
             <Link href={"/"}>
-              <Btn color="secondary" label="Logout" func={handleLogout} />
+              <Btn color="secondary" label={t("Logout")} func={handleLogout} />
             </Link>
           </li>
         </ul>
@@ -73,12 +77,12 @@ function Navbar({ logged }: { logged: boolean }) {
 
           <li>
             <Link href={"/signup"}>
-              <Btn color="secondary" label="Signup" />
+              <Btn color="secondary" label={t("Signup")} />
             </Link>
           </li>
           <li>
             <Link href={"/login"}>
-              <Btn color="secondary" label="Login" />
+              <Btn color="secondary" label={t("Login")} />
             </Link>
           </li>
         </ul>

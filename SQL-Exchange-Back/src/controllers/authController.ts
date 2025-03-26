@@ -3,6 +3,8 @@ import userModel from "../models/user";
 import bcrypt from "bcrypt";
 import db from "../config/pgConfig";
 import { generateTokens } from "../utils/generateJWT";
+import { postContact } from "../utils/hubSpot";
+import { contact } from "../models/contact";
 
 export const registerController = async (req: Request, res: Response) => {
   try {
@@ -41,8 +43,24 @@ export const registerController = async (req: Request, res: Response) => {
       hashPassword,
       wallet.rows[0].id,
     ]);
+    const contact: contact = {
+      properties: {
+        email: email,
+        firstname: name,
+        lastname: "",
+        phone: "",
+        company: "Exchange"
+      }
+    }
+    const response = await postContact(contact)
 
+    if(!response.ok){
+      res.status(500).json({ message: "Error registering user in hubSpot" });
+      return;
+    }
     await db.query("COMMIT");
+
+
 
     res.status(201).json({ message: "User registered successfully" });
   } catch (e) {

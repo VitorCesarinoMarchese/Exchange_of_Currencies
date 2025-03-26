@@ -7,16 +7,17 @@ export default defineConfig({
   test: {
     coverage: {
       reporter: ["text", "json", "html"],
-      exclude: [
-        "**/src/models/**",
-        "**/src/@types/**",
-        "**/eslint.config.mjs",
-        "**/next.config.ts",
-        "**/postcss.config.mjs",
-        "**/vitest.config.mts",
-        "next-exchange-front",
-        "**/src/app/layout.tsx",
-      ],
+      // exclude only works in other pcs for some unknow reason
+      // exclude: [
+      //   "**/src/models/**",
+      //   "**/src/@types/**",
+      //   "**/eslint.config.mjs",
+      //   "**/next.config.ts",
+      //   "**/postcss.config.mjs",
+      //   "**/vitest.config.mts",
+      //   "next-exchange-front",
+      //   "**/src/app/layout.tsx",
+      // ],
       reportsDirectory: "./coverage",
     },
     environment: "jsdom",

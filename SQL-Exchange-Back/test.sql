@@ -11,6 +11,7 @@ CREATE TABLE users (
     password TEXT NOT NULL,
     creation_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     wallet_id INTEGER,
+    refreshtoken VARCHAR(255),
     FOREIGN KEY(wallet_id) REFERENCES wallets(id) ON DELETE SET NULL
 );
 
@@ -25,4 +26,3 @@ CREATE TABLE transactions (
     FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
-SELECT email from users WHERE email = $1 RETURNING 

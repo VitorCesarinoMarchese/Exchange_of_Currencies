@@ -1,7 +1,7 @@
 "use client"
-import Navbar from "../../components/Navbar";
-import TransactionHistory from "../../components/TransactionHistory";
-import { useLogged } from "../../hooks/loggedHook";
+import Navbar from "../../../components/Navbar";
+import TransactionHistory from "../../../components/TransactionHistory";
+import { useLogged } from "../../../hooks/loggedHook";
 
 function History() {
   useLogged();

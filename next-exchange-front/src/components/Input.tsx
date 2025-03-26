@@ -10,7 +10,7 @@ function Input({
   type: string;
   placeholder: string;
   className?: string;
-  change?: () => void;
+  change?: (e: any) => void;
   read?: boolean;
   w?: string
 }) {

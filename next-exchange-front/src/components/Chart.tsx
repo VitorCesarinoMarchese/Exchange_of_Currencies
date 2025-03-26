@@ -7,14 +7,23 @@ import {
   VictoryZoomContainer,
   VictoryAxis,
   ZoomDomain,
+  DomainTuple,
 } from "victory";
 import Btn from "./Btn";
 import { useCharts } from "../hooks/chartHook";
 import { useWebsocket } from "../hooks/websocketHook";
 import { exchangeRates } from "../@types/exchangeRates";
+import { useTranslations } from "next-intl";
 
 function Chart({ className = "" }: { className?: string }) {
-  const [state, setState] = useState({});
+  type ZoomState = {
+    zoomDomain?: ZoomDomain;
+    selectedDomain?: ZoomDomain;
+    zoomedXDomain?: DomainTuple;
+  };
+
+  const t = useTranslations();
+  const [state, setState] = useState<ZoomState>({});
   const [chartType, setChartType] = useState("day/USDGBP");
 
   const { chartData, loading, error } = useCharts(chartType);
@@ -80,10 +89,10 @@ function Chart({ className = "" }: { className?: string }) {
             <li>USD/GBP: {exchangeRates.USDGBP.toFixed(4)}</li>
           </ul>
         ) : (
-          <p>Loading Chart...</p>
+          <p>{t("Loading")} {t("Chart")}...</p>
         )}
         <div className="max-w-[375px] bg-white rounded-xl md:max-w-[660px]">
-          <h3 className="text-center text-2xl mt-4">Loading...</h3>
+          <h3 className="text-center text-2xl mt-4">{t("Loading")}...</h3>
           <VictoryChart
             width={375}
             theme={VictoryTheme.grayscale}
@@ -114,7 +123,7 @@ function Chart({ className = "" }: { className?: string }) {
           <li>
             <Btn
               color={chartType === "day/USDGBP" ? "secondary" : "white"}
-              label="Day"
+              label={t("Day")}
               w="w-[140px]"
               classname="ml-4"
             />
@@ -122,21 +131,21 @@ function Chart({ className = "" }: { className?: string }) {
           <li>
             <Btn
               color={chartType === "week/USDGBP" ? "secondary" : "white"}
-              label="Week"
+              label={t("Week")}
               w="w-[140px]"
             />
           </li>
           <li>
             <Btn
               color={chartType === "month/USDGBP" ? "secondary" : "white"}
-              label="Month"
+              label={t("Month")}
               w="w-[140px]"
             />
           </li>
           <li>
             <Btn
               color={chartType === "year/USDGBP" ? "secondary" : "white"}
-              label="Year"
+              label={t("Year")}
               w="w-[140px]"
               classname="mr-4"
             />
@@ -157,7 +166,7 @@ function Chart({ className = "" }: { className?: string }) {
             <li>USD/GBP: {exchangeRates.USDGBP.toFixed(4)}</li>
           </ul>
         ) : (
-          <p>Loading...</p>
+          <p>{t("Loading")}...</p>
         )}
         <div className="max-w-[375px] bg-white rounded-xl md:max-w-[660px]">
           Error: {error}
@@ -166,7 +175,7 @@ function Chart({ className = "" }: { className?: string }) {
           <li>
             <Btn
               color={chartType === "day/USDGBP" ? "secondary" : "white"}
-              label="Day"
+              label={t("Day")}
               w="w-[140px]"
               classname="ml-4"
               func={() => setChartType("day/USDGBP")}
@@ -175,7 +184,7 @@ function Chart({ className = "" }: { className?: string }) {
           <li>
             <Btn
               color={chartType === "week/USDGBP" ? "secondary" : "white"}
-              label="Week"
+              label={t("Week")}
               w="w-[140px]"
               func={() => setChartType("week/USDGBP")}
             />
@@ -183,7 +192,7 @@ function Chart({ className = "" }: { className?: string }) {
           <li>
             <Btn
               color={chartType === "month/USDGBP" ? "secondary" : "white"}
-              label="Month"
+              label={t("Month")}
               w="w-[140px]"
               func={() => setChartType("month/USDGBP")}
             />
@@ -191,7 +200,7 @@ function Chart({ className = "" }: { className?: string }) {
           <li>
             <Btn
               color={chartType === "year/USDGBP" ? "secondary" : "white"}
-              label="Year"
+              label={t("Year")}
               w="w-[140px]"
               classname="mr-4"
               func={() => setChartType("year/USDGBP")}
@@ -212,7 +221,7 @@ function Chart({ className = "" }: { className?: string }) {
           <li>USD/GBP: {exchangeRates.USDGBP.toFixed(4)}</li>
         </ul>
       ) : (
-        <p>Loading...</p>
+        <p>{t("Loading")}...</p>
       )}
       <div className="max-w-[375px]  md:max-w-[660px] bg-white rounded-xl">
         <div
@@ -271,7 +280,7 @@ function Chart({ className = "" }: { className?: string }) {
         <li>
           <Btn
             color={chartType === "day/USDGBP" ? "secondary" : "white"}
-            label="Day"
+            label={t("Day")}
             w="w-[140px]"
             classname={`ml-4 ${chartType === "day/USDGBP" ? "" : "border"}`}
             func={() => setChartType("day/USDGBP")}
@@ -280,7 +289,7 @@ function Chart({ className = "" }: { className?: string }) {
         <li>
           <Btn
             color={chartType === "week/USDGBP" ? "secondary" : "white"}
-            label="Week"
+            label={t("Week")}
             w="w-[140px]"
             func={() => setChartType("week/USDGBP")}
             classname={chartType === "week/USDGBP" ? "" : "border"}
@@ -289,7 +298,7 @@ function Chart({ className = "" }: { className?: string }) {
         <li>
           <Btn
             color={chartType === "month/USDGBP" ? "secondary" : "white"}
-            label="Month"
+            label={t("Month")}
             w="w-[140px]"
             func={() => setChartType("month/USDGBP")}
             classname={chartType === "month/USDGBP" ? "" : "border"}
@@ -298,7 +307,7 @@ function Chart({ className = "" }: { className?: string }) {
         <li>
           <Btn
             color={chartType === "year/USDGBP" ? "secondary" : "white"}
-            label="Year"
+            label={t("Year")}
             w="w-[140px]"
             classname={`mr-4 ${chartType === "year/USDGBP" ? "" : "border"}`}
             func={() => setChartType("year/USDGBP")}

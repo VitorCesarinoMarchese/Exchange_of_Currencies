@@ -1,11 +1,11 @@
 "use client"
 import { useEffect, useState } from "react";
-import CurencyConverter from "../../components/CurencyConverter";
-import Navbar from "../../components/Navbar";
-import Wallet from "../../components/wallet";
-import TransactionHistory from "../../components/TransactionHistory";
-import { useLogged } from "../../hooks/loggedHook";
-import AddFunds from "../../components/addFunds";
+import CurencyConverter from "../../../components/CurencyConverter";
+import Navbar from "../../../components/Navbar";
+import Wallet from "../../../components/wallet";
+import TransactionHistory from "../../../components/TransactionHistory";
+import { useLogged } from "../../../hooks/loggedHook";
+import AddFunds from "../../../components/addFunds";
 
 function Dashboard() {
   const [reloadTrigger, setReloadTrigger] = useState<boolean>(false);

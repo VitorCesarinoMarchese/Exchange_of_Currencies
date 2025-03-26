@@ -4,6 +4,7 @@ import Btn from "./Btn";
 import Input from "./Input";
 import { addFundsService } from "../services/exchangeService";
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 
 function AddFunds({
   onChangeValue,
@@ -16,6 +17,7 @@ function AddFunds({
     onChangeValue(false);
     addFundsService({ usd, gbp });
   };
+  const t = useTranslations();
 
   return (
     <>
@@ -26,10 +28,11 @@ function AddFunds({
 
       <div className="fixed inset-0 flex items-center justify-center z-20">
         <div className="bg-primary rounded-xl flex flex-col items-center gap-4 p-4 relative">
-          <button onClick={() => onChangeValue(false)} aria-label="close">
+          
+          <button onClick={() => onChangeValue(false)} aria-label="close" className="md:self-end md:mb-2">
             <X size={32} className="self-start -mb-8" />
           </button>
-          <h2 className="font-bold text-secondary text-2xl">Add funds</h2>
+          <h2 className="font-bold text-secondary text-2xl">{t("Add funds")}</h2>
           <Input
             type="text"
             placeholder="USD"
@@ -55,7 +58,7 @@ function AddFunds({
             change={(e) => setGBP(e.target.value)}
           />
           <Btn
-            label="Confirm"
+            label={t("Confirm")}
             color="secondary"
             func={handleAddFunds} 
           />

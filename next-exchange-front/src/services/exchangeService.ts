@@ -2,7 +2,6 @@ import { transaction, transactionResponse } from "../models/transactionModel";
 import { fetchAuthPostApi } from "./apiService";
 
 export const exchangeService = async (transaction: transaction) => {
-  console.log(transaction)
   try {
     const accessToken = localStorage.getItem("access_token")
     if(!accessToken){

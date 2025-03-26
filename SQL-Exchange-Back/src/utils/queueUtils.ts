@@ -1,5 +1,8 @@
 import Bull from 'bull';
 import db from '../config/pgConfig'; 
+import { getContact, postDeal } from './hubSpot';
+import { deal } from '../models/deal';
+import { filter } from '../models/filter';
 
 // docker pull redis
 // docker run --name redis -p 6379:6379 -d redis
@@ -7,13 +10,14 @@ import db from '../config/pgConfig';
 // docker stop redis
 // docker restart redis
 
-const transactionQueue = new Bull('transaction-queue', 'redis://localhost:6379');
-// find the right type of job
+
+const transactionQueue = new Bull('transaction-queue', {
+  redis: { host: process.env.REDIS_HOST || "redis", port: 6379 },
+});
 transactionQueue.process(1, async (job) => {
   const { wallet_id, type, user_id, amount, from, to, rate, usd, gbp } = job.data;
-
   try {
-    await db.query("BEGIN");
+    await db.query("BEGIN");                                         
 
     if (type === "addFunds") {
       const walletResult = await db.query(`SELECT * FROM wallets WHERE id = $1`, [wallet_id]);
@@ -24,6 +28,44 @@ transactionQueue.process(1, async (job) => {
         `UPDATE wallets SET usd = $1, gbp = $2 WHERE id = $3`,
         [Number(oldWallet.usd) + usd, Number(oldWallet.gbp) + gbp, wallet_id]
       );
+      const queryString = `SELECT email FROM users WHERE id = $1`;
+      const user = (await db.query(queryString, [user_id]))
+        .rows[0];
+      const filter: filter = {
+        filterGroups: [
+          {
+            filters: [
+              {
+                propertyName: "email",
+                operator: "EQ",
+                value: user.email,
+              }
+            ],
+          }
+        ],
+      }
+      const get = await getContact(filter)
+      const response = await get.json()
+
+      const usd_amount = Number((Number(oldWallet.usd) + usd).toFixed(2))
+      const gbp_amount = Number((Number(oldWallet.gbp) + gbp).toFixed(2))
+      const deal: deal =  {
+        properties:{
+          usd_amount: usd_amount,
+          gbp_amount: gbp_amount,
+          closedate: String(Date.now()),
+          dealname: "Add Funds",
+          pipeline: "default",
+          dealstage: "contractsent"
+        },
+        associations: [
+          {
+            to: {id: response.results[0].id},
+            types: [{ associationCategory: "HUBSPOT_DEFINED", associationTypeId: 3 }]
+          }
+        ]
+      }
+      await postDeal(deal)
     } else if (type === "exchange") {
       const walletResult = await db.query(`SELECT * FROM wallets WHERE id = $1`, [wallet_id]);
       if (!walletResult.rows.length) throw new Error("Wallet not found");
@@ -43,13 +85,45 @@ transactionQueue.process(1, async (job) => {
       const queryTransaction = `INSERT INTO transactions (user_id, amount, "from", "to", rate) VALUES ($1, $2, $3, $4, $5) RETURNING *;`;
       await db.query(queryTransaction, [user_id, amount, from, to, rate]);
 
+      const queryString = `SELECT email FROM users WHERE id = $1`;
+      const user = (await db.query(queryString, [user_id]))
+        .rows[0];
+      const filter: filter = {
+        filterGroups: [
+          {
+            filters: [
+              {
+                propertyName: "email",
+                operator: "EQ",
+                value: user.email,
+              }
+            ],
+          }
+        ],
+      }
+      const get = await getContact(filter)
+      const response = await get.json()
+      const deal: deal =  {
+        properties:{
+          amount: amount,
+          closedate: String(Date.now()),
+          dealname: "exchange",
+          pipeline: "default",
+          dealstage: "contractsent"
+        },
+        associations: [
+          {
+            to: {id: response.results[0].id},
+            types: [{ associationCategory: "HUBSPOT_DEFINED", associationTypeId: 3 }]
+          }
+        ]
+      }
+      await postDeal(deal)
     }
 
     await db.query("COMMIT");
-    console.log(`Transaction for user ${user_id} completed`);
   } catch (e) {
     await db.query("ROLLBACK");
-    console.error(`Transaction for user ${user_id} failed:`, e);
     throw e;
   }
 });

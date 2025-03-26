@@ -151,8 +151,7 @@ export const postTransaction = async (req: Request, res: Response) => {
               to: currency == "USDGBP" ? "gbp" : "usd",
               rate: rate,
             };
-            const job = await transactionQueue.add(jobData, { delay: 3000 });
-
+            const job = await transactionQueue.add(jobData);
             await job.finished();
             const queryTransaction = `SELECT * FROM transactions WHERE user_id = $1 AND amount = $2 ORDER BY transaction_date DESC LIMIT 1;`;
             const transaction: TransactionModel = (

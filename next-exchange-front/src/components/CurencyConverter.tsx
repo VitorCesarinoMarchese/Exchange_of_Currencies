@@ -7,8 +7,10 @@ import Btn from "./Btn";
 import { usePathname } from 'next/navigation'
 import { exchangeService } from "../services/exchangeService";
 import { transaction } from "../models/transactionModel";
+import { useTranslations } from "next-intl";
 
-function CurencyConverter({onTransaction, className}: {onTransaction?: () => void, className?: string}) {
+
+function CurencyConverter({onTransaction, className}: {onTransaction: () => void, className?: string}) {
   const [currency, setCurrency] = useState("USD");
   const [to, setTo] = useState(currency == "USD" ? "GBP" : "USD");
   const [amount, setAmount] = useState("100");
@@ -18,7 +20,10 @@ function CurencyConverter({onTransaction, className}: {onTransaction?: () => voi
     rate: 0.77,
   });
 
+  const t = useTranslations();
+  console.log()
   const location = usePathname();
+  const locationVerification = location == "/pt-br/dashboard" || location == "/en-us/dashboard" || location == "/es-pe/dashboard"
 
   useEffect(() => setTo(currency === "USD" ? "GBP" : "USD"), [currency]);
 
@@ -44,8 +49,8 @@ function CurencyConverter({onTransaction, className}: {onTransaction?: () => voi
 
   return (
     <div className={"md:max-w-[675px]" + ' ' + className}>
-      <h2 className="font-bold text-3xl self-start p-2">Curency Convert</h2>
-      <span className="text-red-500">{Number(amount) <= 0 ? "Negatives numbers and zero can't be used": ""}</span>
+      <h2 className="font-bold text-3xl self-start p-2">{t("Curency Convert")}</h2>
+      <span className="text-red-500">{Number(amount) <= 0 ? t("Negatives numbers and zero can't be used"): ""}</span>
       <div className="flex flex-col gap-4 bg-primary p-4 rounded-xl items-center md:w-[675px] md:flex-row md:flex-wrap md:justify-center">
         <Dropdown
           onChangeValue={(selectedCurrency: string) =>
@@ -75,12 +80,13 @@ function CurencyConverter({onTransaction, className}: {onTransaction?: () => voi
           w="w-80 md:w-[300px]"
           className="placeholder:text-black placeholder:text-center"
         />
-        {location == "/dashboard" ? (
+        {locationVerification ? (
           <Btn
-            label="Exchange"
+            label={t("Exchange")}
             color="secondary"
             w="w-80 md:w-[300px]"
             func={() => {
+              console.log("called")
               if(Number(amount) < 0){
                 return
               }
