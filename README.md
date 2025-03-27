@@ -7,7 +7,7 @@ This project is a currency exchange platform where users can sign up, log in, an
 - [Mongodb Backend README](./Exchange_Back/README.md)
 - [React Frontend README](./Exchange_Front/README.md)
 - [SQL Backend README](./SQL-Exchange-Back/README.md)
-- [Next Frontend README](./next-exchange-front/README.md)
+- [Next Frontend README](./Next-Exchange-Front/README.md)
 
 ## 💽 Installation
 ```bash

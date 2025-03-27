@@ -27,6 +27,10 @@ jest.mock("ws", () => {
   };
 });
 
+afterAll(() => {
+  jest.clearAllMocks()
+})
+
 describe("WebSocket Module", () => {
   beforeEach(() => {
     jest.resetModules();

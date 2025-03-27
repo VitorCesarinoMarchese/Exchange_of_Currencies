@@ -8,6 +8,7 @@ import Navbar from "../../components/Navbar";
 import Wallet from "../../components/wallet";
 import { useLogged } from "../../hooks/loggedHook";
 import { useTranslations } from 'next-intl';
+import Footer from '../../components/Footer';
 
  
 
@@ -45,6 +46,7 @@ function Home() {
             func={handleRedirect}
           />
         </div>
+        <Footer/>
       </>
     );
   } else {
@@ -75,6 +77,7 @@ function Home() {
             func={() => handleRedirect()}
           />
         </div>
+        <Footer />
       </>
     );
   }

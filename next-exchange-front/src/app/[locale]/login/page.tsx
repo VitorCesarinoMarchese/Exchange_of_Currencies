@@ -7,6 +7,7 @@ import Navbar from "../../../components/Navbar";
 import { useState, FormEvent, useEffect } from "react";
 import { loginService } from "../../../services/loginService";
 import { useTranslations } from 'next-intl';
+import Footer from '@/components/Footer';
 
 function Login() {
   const t = useTranslations();
@@ -47,7 +48,7 @@ function Login() {
     <>
     {access_token ?  redirect("/")  : "" }
       <Navbar logged={false} />
-      <div className="flex flex-col items-center mt-8 ">
+      <div className="flex flex-col items-center mt-8 min-h-[80vh]">
         <h1 className="text-3xl font-bold mb-7">{t("Login")}</h1>
         <form onSubmit={handleSubmit} className="flex flex-col items-center gap-3">
           <Input
@@ -82,6 +83,7 @@ function Login() {
           </Link>
         </p>
       </div>
+      <Footer/>
     </>
   );
 }

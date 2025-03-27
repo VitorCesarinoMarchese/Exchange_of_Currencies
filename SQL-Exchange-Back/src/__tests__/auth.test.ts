@@ -16,9 +16,9 @@ describe("Auth system", () => {
     describe("given the email is already in use", () => {
       it("Should return a 409", async () => {
         const res = await request(app).post(`/api/auth/register`).send({
-          name: "tept",
-          email: "tept@tept.com",
-          password: "tept",
+          name: "ok",
+          email: "ok@ok.com",
+          password: "ok",
         });
         expect(res.status).toBe(409);
         expect(res.body).toEqual({ error: "Email already in use" });
@@ -68,15 +68,15 @@ describe("Auth system", () => {
     describe("given the user login is successful", () => {
       it("Should return a 200", async () => {
         const res = await request(app).post(`/api/auth/login`).send({
-          email: "tept@tept.com",
-          password: "tept",
+          email: "ok@ok.com",
+          password: "ok",
         });
         expect(res.status).toBe(200);
         expect(res.body).toMatchObject({
           message: "Login successful",
           accessToken: expect.any(String),
           refreshToken: expect.any(String),
-          user: { id: 17, email: expect.any(String) },
+          user: { id: expect.any(Number), email: expect.any(String) },
         });
       });
     });

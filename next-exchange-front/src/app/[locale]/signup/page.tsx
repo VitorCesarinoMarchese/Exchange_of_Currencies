@@ -7,6 +7,7 @@ import Navbar from "../../../components/Navbar";
 import { FormEvent, useState, useEffect } from "react";
 import { signupService } from "../../../services/signupService";
 import { useTranslations } from "next-intl";
+import Footer from "@/components/Footer";
 
 function Register() {
   const t = useTranslations();
@@ -61,7 +62,7 @@ function Register() {
     <>
       {access_token ? redirect("/") : ""}
       <Navbar logged={false} />
-      <div className="flex flex-col items-center mt-8 ">
+      <div className="flex flex-col items-center mt-8 min-h-[80vh] justify-start">
         <h1 className="text-3xl font-bold mb-7">{t("Signup")}</h1>
         <form
           onSubmit={handleSubmit}
@@ -116,6 +117,7 @@ function Register() {
           </Link>
         </p>
       </div>
+          <Footer/>
     </>
   );
 }

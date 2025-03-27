@@ -55,9 +55,14 @@ JWT_SECRET=Your_JWT_SECRET
 POSTGRESS_PASSWORD=123456
 API_KEY_HUBSPOT=Your_API_KEY_HUBSPOT
 URL_HUBSPOT=https://api.hubapi.com/crm/v3/objects
+# DB_USER=Your_DB_USER
+# DB_HOST=Your_DB_HOST
+# DB_NAME=Your_DB_NAME
+# DB_PASSWORD=Your_DB_PASSWORD
 ```
 
 **Note:** Ensure you replace `Your_` values with the correct credentials, or the backend will not function properly.
+**Note:** Only uncoment de `DB_` if you are runing it locally.
 
 ## 📜 API Documentation
 

@@ -11,6 +11,9 @@ describe("jwt system", () => {
       rows: [{ id: 1, email: "test@example.com", refreshToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSIsImlhdCI6MTc0MjU3NjYzMywiZXhwIjoxNzQzMTgxNDMzfQ.VO3hP4QhFffONgSg9r5vNcwLtL3mXjrb_a3dKtU_DMU" }]
     })
   })
+  afterAll(() => {
+    jest.clearAllMocks()
+  })
   describe("Refresh Token", () => {
     describe("given the body does not exist", () => {
       it("Should return a 400", async () => {

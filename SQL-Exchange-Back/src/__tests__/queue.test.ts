@@ -1,13 +1,10 @@
-import Bull from "bull";
 import db from "../config/pgConfig";
 import transactionQueue from "../utils/queueUtils"; // Assuming your file is named transactionQueue.js
 
 jest.mock("../config/pgConfig"); // Mock db.query
 
 describe("Transaction Queue Tests", () => {
-  beforeAll(() => {
-    jest.clearAllMocks();
-  });
+
 
   it("should add funds correctly", async () => {
     db.query = jest
@@ -87,12 +84,12 @@ describe("Transaction Queue Tests", () => {
   it("should commit transaction on success", async () => {
     db.query = jest
       .fn()
-      .mockReturnValue({ rows: [{ id: 1, usd: 100, gbp: 50, email: "test@test.com"  }] });
+      .mockReturnValue({ rows: [{ id: 2, usd: 100, gbp: 50, email: "test@test.com"  }] });
 
     const job = await transactionQueue.add({
       wallet_id: 1,
       type: "exchange",
-      user_id: 1,
+      user_id: 2,
       amount: 1,
       from: "usd",
       to: "gbp",

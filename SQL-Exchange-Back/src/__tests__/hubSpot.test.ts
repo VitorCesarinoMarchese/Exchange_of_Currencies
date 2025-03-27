@@ -13,6 +13,7 @@ describe("HubSpot API functions", () => {
   afterEach(() => {
     jest.clearAllMocks();
   });
+  
   describe("Post Contact", () => {
     it("should send a POST request and return response", async () => {
       const body = {

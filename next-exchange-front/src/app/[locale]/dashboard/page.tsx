@@ -6,6 +6,7 @@ import Wallet from "../../../components/wallet";
 import TransactionHistory from "../../../components/TransactionHistory";
 import { useLogged } from "../../../hooks/loggedHook";
 import AddFunds from "../../../components/addFunds";
+import Footer from "@/components/Footer";
 
 function Dashboard() {
   const [reloadTrigger, setReloadTrigger] = useState<boolean>(false);
@@ -25,7 +26,7 @@ function Dashboard() {
   return (
     <>
       <Navbar logged={true} />
-      <div className="flex flex-col items-center p-4 gap-8">
+      <div className="flex flex-col items-center p-4 gap-8 min-h-[80vh]">
         <Wallet
           reloadTrigger={reloadTrigger}
           onChangeValue={(value: boolean) => {
@@ -41,6 +42,7 @@ function Dashboard() {
         <CurencyConverter onTransaction={handleTransaction} />
         <TransactionHistory reloadTrigger={reloadTrigger} />
       </div>
+      <Footer/>
     </>
   );
 }
