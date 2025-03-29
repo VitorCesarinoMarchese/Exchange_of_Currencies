@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Register from "../app/[locale]/signup/page";
 import { vi } from "vitest";
 import { signupService } from "../services/signupService";
-import { redirect } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import en from "../../messages/en-us.json";
 import pt from "../../messages/pt-br.json";
@@ -51,7 +51,10 @@ vi.mock("../components/Navbar", () => ({
 vi.mock("../services/signupService", () => ({
   signupService: vi.fn(),
 }));
-vi.mock("next/navigation", () => ({ redirect: vi.fn() }));
+vi.mock("next/navigation", () => ({ 
+  redirect: vi.fn(),
+  usePathname: vi.fn() 
+}));
 
 describe("Register Component", () => {
   test("renders register form correctly", () => {

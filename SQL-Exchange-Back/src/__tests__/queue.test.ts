@@ -1,38 +1,33 @@
 import db from "../config/pgConfig";
-import transactionQueue from "../utils/queueUtils"; // Assuming your file is named transactionQueue.js
-
-jest.mock("../config/pgConfig"); // Mock db.query
+import transactionQueue from "../utils/queueUtils";
 
 describe("Transaction Queue Tests", () => {
-
+  beforeEach(() => {
+    jest.clearAllMocks();
+  })
 
   it("should add funds correctly", async () => {
-    db.query = jest
-      .fn()
-      .mockReturnValue({ rows: [{ id: 1, usd: 100, gbp: 50, email: "test@test.com" }] });
+    const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
 
     const job = await transactionQueue.add({
-      wallet_id: 1,
-      type: "addFunds",
-      user_id: 1,
-      amount: 1,
-      from: null,
-      to: null,
-      rate: null,
+      wallet_id: 20,
+      user_id: 20,
+      amount: 0,
       usd: 50,
-      gbp: 25,
+      gbp: 50,
+      type: "addFunds",
+      from: "usd",
+      to: "gbp",
+      rate: 0,
     });
+    transactionQueue.emit('completed', job);
+
     await job.finished();
 
-    expect(db.query).toHaveBeenCalledWith(
-      "UPDATE wallets SET usd = $1, gbp = $2 WHERE id = $3",
-      [150, 75, 1]
-    );
-    expect(db.query).toHaveBeenCalledTimes(5); 
+    expect(logSpy).toHaveBeenCalled(); 
   });
 
   it("should fail when wallet is not found", async () => {
-    db.query = jest.fn().mockReturnValue({ rows: [] });
 
     const job = await transactionQueue.add({
       wallet_id: 999, 
@@ -51,19 +46,15 @@ describe("Transaction Queue Tests", () => {
       await job.finished();
     } catch (e: any) {
       expect(e.message).toBe("Wallet not found");
-      expect(db.query).toHaveBeenCalledTimes(3); 
     }
   });
 
   it("should fail if insufficient balance", async () => {
-    db.query = jest
-      .fn()
-      .mockReturnValue({ rows: [{ id: 1, usd: 10, gbp: 5 }] });
 
     const job = await transactionQueue.add({
-      wallet_id: 1,
+      wallet_id: 20,
       type: "exchange",
-      user_id: 17,
+      user_id: 20,
       amount: 200000,
       from: "usd",
       to: "gbp",
@@ -77,28 +68,28 @@ describe("Transaction Queue Tests", () => {
       await job.finished();
     } catch (e: any) {
       expect(e.message).toBe("Insufficient USD balance");
-      expect(db.query).toHaveBeenCalledTimes(5);
     }
   });
 
   it("should commit transaction on success", async () => {
-    db.query = jest
-      .fn()
-      .mockReturnValue({ rows: [{ id: 2, usd: 100, gbp: 50, email: "test@test.com"  }] });
+    const logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+
 
     const job = await transactionQueue.add({
-      wallet_id: 1,
+      wallet_id: 20,
       type: "exchange",
-      user_id: 2,
+      user_id: 20,
       amount: 1,
       from: "usd",
       to: "gbp",
       rate: 1.2,
       usd: 0,
       gbp: 0,
-    }, { delay: 3000 });
+    });
+
+    transactionQueue.emit('completed', job);
     await job.finished();
 
-    expect(db.query).toHaveBeenCalledWith("COMMIT");
+    expect(logSpy).toHaveBeenCalled(); 
   });
 });

@@ -94,8 +94,7 @@ export const loginController = async (req: Request, res: Response) => {
     const { accessToken, refreshToken } = await generateTokens(String(user.id));
 
     const refreshInsertQuery = `UPDATE users SET refreshToken = $1 WHERE id = $2`;
-    await db.query(refreshInsertQuery, [accessToken, user.id]);
-
+    await db.query(refreshInsertQuery, [refreshToken, user.id]);
     res.status(200).json({
       message: "Login successful",
       accessToken,

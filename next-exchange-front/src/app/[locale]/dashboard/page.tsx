@@ -13,9 +13,9 @@ function Dashboard() {
   const [open, setOpen] = useState(false);
   useLogged();
   useEffect(() => {
-    setTimeout(() => {
-      setReloadTrigger((prev: boolean) => !prev);
-    }, 100);
+      setTimeout(() => {
+        setReloadTrigger((prev: boolean) => !prev);
+      }, 100);
   }, [open]);
   const handleTransaction = () => {
     setTimeout(() => {

@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Login from "../app/[locale]/login/page";
 import { vi } from "vitest";
 import { loginService } from "../services/loginService";
-import { redirect } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import en from "../../messages/en-us.json";
 import pt from "../../messages/pt-br.json";
@@ -52,7 +52,10 @@ vi.mock("../services/loginService", () => ({
   loginService: vi.fn(),
 }));
 
-vi.mock("next/navigation", () => ({ redirect: vi.fn() }));
+vi.mock("next/navigation", () => ({ 
+  redirect: vi.fn(), 
+  usePathname: vi.fn() 
+}));
 
 describe("Login Component", () => {
   test("renders login form correctly", () => {
@@ -68,7 +71,9 @@ describe("Login Component", () => {
     expect(
       screen.getByPlaceholderText("example@email.com")
     ).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Type in a Strong Password")).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText("Type in a Strong Password")
+    ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /login/i })).toBeInTheDocument();
     expect(screen.getByText(/Don't have an account/i)).toBeInTheDocument();
   });
@@ -86,7 +91,9 @@ describe("Login Component", () => {
     expect(
       screen.getByPlaceholderText("exemplo@email.com")
     ).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Digite uma Senha Forte")).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText("Digite uma Senha Forte")
+    ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Entrar/i })).toBeInTheDocument();
     expect(screen.getByText(/Não tem uma conta/i)).toBeInTheDocument();
   });
@@ -104,11 +111,14 @@ describe("Login Component", () => {
     expect(
       screen.getByPlaceholderText("ejemplo@email.com")
     ).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("Introduce una contraseña segura")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Iniciar sesión/i })).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText("Introduce una contraseña segura")
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Iniciar sesión/i })
+    ).toBeInTheDocument();
     expect(screen.getByText(/¿No tienes una cuenta?/i)).toBeInTheDocument();
   });
-
 
   test("shows error when invalid credentials are provided", async () => {
     (loginService as unknown as jest.Mock).mockResolvedValue({

@@ -1,5 +1,5 @@
 import React from "react";
-import { redirect } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import Home from "../app/[locale]/page";
 import { vi } from "vitest";
@@ -39,6 +39,7 @@ vi.mock("../hooks/loggedHook", () => ({
 
 vi.mock("next/navigation", () => ({
   redirect: vi.fn(),
+  usePathname: vi.fn()
 }));
 
 describe("Home Component", () => {

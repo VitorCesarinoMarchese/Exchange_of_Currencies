@@ -8,7 +8,7 @@ const { app } = createServer();
 describe("jwt system", () => {
   beforeEach(() => {
     db.query = jest.fn().mockResolvedValue({
-      rows: [{ id: 1, email: "test@example.com", refreshToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSIsImlhdCI6MTc0MjU3NjYzMywiZXhwIjoxNzQzMTgxNDMzfQ.VO3hP4QhFffONgSg9r5vNcwLtL3mXjrb_a3dKtU_DMU" }]
+      rows: [{ id: 1, email: "test@example.com", refreshToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMjgiLCJpYXQiOjE3NDMxODY5MjQsImV4cCI6MTc0Mzc5MTcyNH0.V3ukPUC_WOUIjsa70elUm3vYW8V_OCKcCu938JWD-8o" }]
     })
   })
   afterAll(() => {
@@ -42,11 +42,11 @@ describe("jwt system", () => {
     describe("given the user refresh token is valid", () => {
       it("Should return a 200", async () => {    
         db.query = jest.fn().mockResolvedValue({
-          rows: [{ id: 1, email: "test@example.com", refreshToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSIsImlhdCI6MTc0MjU3NjYzMywiZXhwIjoxNzQzMTgxNDMzfQ.VO3hP4QhFffONgSg9r5vNcwLtL3mXjrb_a3dKtU_DMU" }]
+          rows: [{ id: 1, email: "test@example.com", refreshToken: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMjgiLCJpYXQiOjE3NDMxODY5MjQsImV4cCI6MTc0Mzc5MTcyNH0.V3ukPUC_WOUIjsa70elUm3vYW8V_OCKcCu938JWD-8o" }]
         })
         const res = await request(app).post(`/api/auth/refresh-token`).send({
           refreshToken:
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMSIsImlhdCI6MTc0MjU3NjYzMywiZXhwIjoxNzQzMTgxNDMzfQ.VO3hP4QhFffONgSg9r5vNcwLtL3mXjrb_a3dKtU_DMU",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiMjgiLCJpYXQiOjE3NDMxODY5MjQsImV4cCI6MTc0Mzc5MTcyNH0.V3ukPUC_WOUIjsa70elUm3vYW8V_OCKcCu938JWD-8o",
         });
         expect(res.status).toBe(200);
         expect(res.body).toMatchObject({ accessToken: expect.any(String) });

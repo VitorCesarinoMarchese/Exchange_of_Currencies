@@ -37,5 +37,7 @@
   "Amount": "Amount",
   "From": "From",
   "Date": "Date",
+  "Name": "Name",
+  "Confirm": "Confirm",
   "No transactions found": "No transactions found."
 }

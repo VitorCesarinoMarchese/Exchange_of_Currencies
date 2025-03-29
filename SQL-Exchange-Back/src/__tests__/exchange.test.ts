@@ -121,7 +121,7 @@ describe("Exchange System", () => {
           .post(`/api/exchange/addfunds/${userId}`)
           .set("Authorization", "valid-token")
           .send({ usd: 100, gbp: 40 });
-          expect(res.body).toEqual({ error: "User not found" });
+        expect(res.body).toEqual({ error: "User not found" });
         expect(res.status).toBe(404);
       });
     });
@@ -129,12 +129,11 @@ describe("Exchange System", () => {
     describe("given the user exists and has a wallet", () => {
       it("Should return a 200", async () => {
         (validateToken as jest.Mock).mockReturnValue(true);
-        const userId = 2;
+        const userId = 20;
         const res = await request(app)
           .post(`/api/exchange/addfunds/${userId}`)
           .set("Authorization", "valid-token")
           .send({ usd: 100, gbp: 100 });
-        expect(res.status).toBe(200);
         expect(res.body).toEqual({
           wallet: {
             usd: expect.any(String),
@@ -142,6 +141,7 @@ describe("Exchange System", () => {
             gbp: expect.any(String),
           },
         });
+        expect(res.status).toBe(200);
       });
     });
   });
@@ -205,8 +205,8 @@ describe("Exchange System", () => {
           .post(`/api/exchange/transaction`)
           .set("Authorization", "valid-token")
           .send({ currency: "USDGBP", amount: 100, user_id, rate: 1 });
-          expect(res.status).toBe(404);
-          expect(res.body).toEqual({ error: "User not found" });
+        expect(res.status).toBe(404);
+        expect(res.body).toEqual({ error: "User not found" });
       });
     });
 
@@ -229,8 +229,7 @@ describe("Exchange System", () => {
         const res = await request(app)
           .post(`/api/exchange/transaction`)
           .set("Authorization", "valid-token")
-          .send({ currency: "USDGBP", amount: 1, user_id: 2, rate: 1 });
-        expect(res.status).toBe(200);
+          .send({ currency: "USDGBP", amount: 1, user_id: 20, rate: 1 });
         expect(res.body).toMatchObject({
           document: expect.objectContaining({
             id: expect.any(Number),
@@ -243,6 +242,7 @@ describe("Exchange System", () => {
           }),
           total: expect.any(Number),
         });
+        expect(res.status).toBe(200);
       });
     });
   });
@@ -250,7 +250,7 @@ describe("Exchange System", () => {
   describe("Get transaction", () => {
     describe("given missing token", () => {
       it("Should return a 401", async () => {
-        const user_id =1;
+        const user_id = 1;
         const res = await request(app).get(
           `/api/exchange/transaction_history/${user_id}`
         );

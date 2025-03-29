@@ -18,7 +18,7 @@ To run the backend using Docker Compose, follow these steps:
 1. **Build and start the backend container**:
 
    ```bash
-   docker-compose up --build
+      docker-compose up --build
    ```
 
 2. The backend will be available at `http://localhost:3030`.

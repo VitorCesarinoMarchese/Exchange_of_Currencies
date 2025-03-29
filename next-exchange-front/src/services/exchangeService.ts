@@ -23,7 +23,8 @@ export const addFundsService = async (funds: {usd: number, gbp:number}) => {
     if(!accessToken || !user_id){
       return "Unable to find accessToken"
     }
-    console.log(funds.usd > 0)
+    funds.usd = parseFloat(Number(funds.usd).toFixed(2))
+    funds.gbp = parseFloat(Number(funds.gbp).toFixed(2))
     const response = await fetchAuthPostApi(`exchange/addfunds/${user_id}`, funds, accessToken)
     const data = await response.json()
     return {data, error: null, loading: false}

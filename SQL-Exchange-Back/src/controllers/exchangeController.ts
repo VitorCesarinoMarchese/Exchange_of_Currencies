@@ -46,6 +46,8 @@ export const addFundsController = async (req: Request, res: Response) => {
       res.status(400).json({ error: "USD and GBP amounts are required" });
       return;
     }
+    Number(usd);
+    Number(gbp);
     if (!isPositiveNumber(usd) || !isPositiveNumber(gbp)) {
       res
         .status(400)
